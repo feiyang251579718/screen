@@ -1,0 +1,71 @@
+@import './theme.less';
+
+body {
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino', 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Microsoft YaHei', '微软雅黑', Helvetica,
+    sans-serif !important;
+}
+
+#root {
+  height: 100%;
+}
+
+.slave-wrapper {
+  height: 0;
+  flex: 1 1 auto;
+}
+
+ul {
+  margin-bottom: 0 !important;
+  padding: 0;
+  list-style: none !important;
+}
+
+h2 {
+  color: 000000;
+  margin: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 自定义滚动条样式 */
+body,
+div,
+section,
+main textarea,
+ul,
+pre {
+  /* Chrome */
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #dbdde0;
+  }
+
+  /* Firefox */
+  scrollbar-color: #dbdde0;
+  scrollbar-width: 6px;
+}
+
+textarea,
+ul,
+pre {
+  /* Chrome */
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* Firefox */
+  scrollbar-width: 4px;
+}
