@@ -12,5 +12,17 @@
 }
 
 .content {
-  padding: 20px;
+  padding        : 20px;
+  display        : flex;
+  justify-content: space-between;
+
+  .left,
+  .right {
+    width: 360px;
+    flex : 0 0 360px;
+  }
+
+  .middle {
+    flex: 1 1 0;
+  }
 }

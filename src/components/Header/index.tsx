@@ -10,7 +10,7 @@ dayjs.extend(duration);
 interface IProps { }
 
 const Header: React.FC<IProps> = () => {
-  const [count, setCount] = useState(10 * 1000);
+  const [count, setCount] = useState(8000 * 1000);
   useInterval(() => {
     if (count === 0) return;
     setCount(c => c - 1000);
@@ -18,7 +18,7 @@ const Header: React.FC<IProps> = () => {
 
   const timeStr = useMemo(() => {
     const countdownDuration = dayjs.duration(count)
-    return `${Math.floor(countdownDuration.asHours())}小时${Math.floor(countdownDuration.minutes())}分${countdownDuration.seconds()}秒`
+    return `${Math.floor(countdownDuration.asHours())}:${Math.floor(countdownDuration.minutes())}:${countdownDuration.seconds()}`
   }, [count])
   return <div className={style.header}>
     <div className={style.logo}>深信服产业教育中心</div>
