@@ -1,0 +1,29 @@
+@import url('~@/theme.less');
+
+.header {
+    display    : flex;
+    padding    : 24px;
+    align-items: center;
+
+    .logo {
+        flex: 0 0 auto;
+    }
+
+    .title {
+        flex      : 1 1 0;
+        font-size : 24px;
+        text-align: center;
+    }
+
+    .time {
+        flex   : 0 0 auto;
+        align-items: center;
+        display: flex;
+
+        .countdown {
+            margin-left: 8px;
+            font-size  : 20px;
+            font-weight: bold;
+        }
+    }
+}
