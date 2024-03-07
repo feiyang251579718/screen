@@ -10,8 +10,8 @@ const Index: React.FC<IProps> = () => {
     <div className={style.content}>
       <div className={style.left}>
         <TeamInfo />
-        <List title="攻击队排名" />
-        <List title="防守队排名" />
+        <List title="攻击队排名" type="red" collapse={false} />
+        <List title="防守队排名" type="blue" collapse={false} />
       </div>
       <div className={style.middle}></div>
       <div className={style.right}></div>

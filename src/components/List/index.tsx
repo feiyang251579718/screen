@@ -5,6 +5,7 @@ import style from "./style.less"
 interface IProps {
     title: string
     type: 'red' | 'blue'
+    collapse?: boolean
 }
 
 interface TeamData {
@@ -14,7 +15,7 @@ interface TeamData {
     memberNum: number
 }
 
-const List: React.FC<IProps> = ({ title }) => {
+const List: React.FC<IProps> = ({ title, type, collapse }) => {
     const listData = new Array<TeamData>(10).fill({ name: '黑客', score: 23841, rank: 1, memberNum: 2 })
     const columns = useMemo(() => {
         return [
@@ -30,7 +31,7 @@ const List: React.FC<IProps> = ({ title }) => {
                 label: '队伍名称',
                 dataIndex: 'name',
                 render: (record: TeamData) => {
-                    return <div className={style.colorRed}>{record.name}</div>
+                    return <div className={type === 'red' ? style.colorRed : style.colorBlue}>{record.name}</div>
                 }
             },
             {
@@ -43,7 +44,7 @@ const List: React.FC<IProps> = ({ title }) => {
             },
         ]
     }, [])
-    return <Panel title={title}>
+    return <Panel title={title} collapse={collapse}>
         <div className={style.list}>
             <div className={style.header}>
                 {
