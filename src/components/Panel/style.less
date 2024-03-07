@@ -1,18 +1,45 @@
 @import url('~@/theme.less');
 
 .panel {
-    width           : 360px;
-    background-color: lightblue;
+    &:extend(.cardBorder);
+    width: @card-width;
+    background: radial-gradient(67% 73% at 50% 89%, rgba(19, 20, 58, 0.4) 0%, rgba(43, 44, 108, 0) 100%);
 
     .header {
-        padding         : 8px 30px;
-        background-color: aqua;
+        border: 1px solid;
+        height: 47px;
+        position: relative;
 
         .title {
-            font-weight: bold;
-            font-size  : 20px;
-            color      : @color-white;
-            line-height: 1;
+            font-family: PingFangSC, PingFang SC;
+            font-weight: 600;
+            font-size: 20px;
+            padding-left: 80px;
+            padding-top: 8px;
+            color: #FFFFFF;
+            line-height: 28px;
+            text-align: left;
+            font-style: normal;
+            position: relative;
+            z-index: 100;
+        }
+
+        .shadow {
+            height: 31px;
+            position: absolute;
+            border-bottom: 1px solid #0000;
+            top: 9px;
+            width: 100%;
+            border-radius: 0 0 0 30px;
+            background: linear-gradient(180deg, rgba(19, 23, 66, 0) 0%, #3C55E4 100%);
+            border-image: linear-gradient(106deg, rgba(94, 186, 236, 0), rgba(94, 186, 235, 1), rgba(73, 129, 188, 0.58), rgba(44, 49, 121, 0)) 1 1;
+        }
+
+        .shadowLight {
+            &:extend(.shadow);
+            position: absolute;
+            opacity: 0.5;
+            top: 14px;
         }
     }
 
