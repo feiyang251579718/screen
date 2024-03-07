@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
-import style from "./style.less"
 import Panel from "../Panel"
+import style from "./style.less"
 
 interface IProps {
     title: string
+    type: 'red' | 'blue'
 }
 
 interface TeamData {
@@ -29,7 +30,7 @@ const List: React.FC<IProps> = ({ title }) => {
                 label: '队伍名称',
                 dataIndex: 'name',
                 render: (record: TeamData) => {
-                    return <div>{record.name}</div>
+                    return <div className={style.colorRed}>{record.name}</div>
                 }
             },
             {

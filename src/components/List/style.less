@@ -2,16 +2,20 @@
 
 .list {
     font-size: 12px;
+    border: 0px solid #70CFFF;
 
     .header {
-        display      : flex;
-        align-items  : center;
-        border-bottom: 1px solid #000;
+        display: flex;
+        padding: 5px;
+        align-items: center;
+        border-bottom: 1px solid;
+        margin-bottom: 5px;
+        border-image: linear-gradient(90deg, rgba(109, 135, 255, 1), rgba(156, 226, 255, 1), rgba(99, 126, 255, 1)) 1 1;
 
         .headerItem {
             text-align: center;
-            flex      : 1 1 0;
-            color     : @color-white;
+            flex: 1 1 0;
+            color: @color-white;
         }
     }
 
@@ -21,10 +25,14 @@
             display: flex;
 
             .itemCell {
-                color      : @color-white;
-                text-align : center;
-                flex       : 1 1 0;
-                line-height: 20px;
+                flex: 1 1 0;
+                font-family: PingFangSC, PingFang SC;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 27px;
+                color: @color-white;
+                text-align: center;
+                font-style: normal;
             }
         }
     }
