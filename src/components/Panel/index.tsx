@@ -16,7 +16,7 @@ const List: React.FC<IProps> = ({ title, collapse, children }) => {
             }
             <div className={style.title}>{title}</div>
             <div className={style.shadow} />
-            <div className={cls(style.shadowLight, style.shadow)} />
+            {/* <div className={cls(style.shadowLight, style.shadow)} /> */}
         </div>
         <div className={style.content}>
             {children}
