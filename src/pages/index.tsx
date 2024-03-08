@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, List, TeamInfo, BattleInfo } from "@/components"
+import { Header, List, TeamInfo, BattleInfo, PieCard, WarnList, Result } from "@/components"
 import style from "./index.less"
 
 interface IProps { }
@@ -21,7 +21,11 @@ const Index: React.FC<IProps> = () => {
         </div>
         <div></div>
       </div>
-      <div className={style.right}></div>
+      <div className={style.right}>
+        <PieCard />
+        <WarnList />
+        <Result />
+      </div>
 
     </div>
   </div>
