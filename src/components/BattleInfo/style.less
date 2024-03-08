@@ -1,0 +1,31 @@
+@import url('~@/theme.less');
+
+.battleInfo {
+    &:extend(.cardBorder);
+    width: 100px;
+    height: 68px;
+    background: linear-gradient(180deg, rgba(8, 18, 57, 0.62) 0%, #162F77 100%);
+    border-radius: 4px;
+    backdrop-filter: blur(6px);
+    padding: 8px 0;
+
+    .num {
+        font-family: AlibabaPuHuiTi_2_95_ExtraBold;
+        font-size: 28px;
+        color: #FFFFFF;
+        line-height: 28px;
+        text-align: center;
+        font-style: normal;
+    }
+
+    .title {
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 500;
+        font-size: 14px;
+        color: #FFFFFF;
+        line-height: 20px;
+        text-align: center;
+        font-style: normal;
+        margin-top: 4px;
+    }
+}

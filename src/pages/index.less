@@ -28,5 +28,16 @@
 
   .middle {
     flex: 1 1 0;
+    position: relative;
+
+    .battleContent {
+      position: absolute;
+      right: 14px;
+      display: flex;
+
+      >div+div {
+        margin-left: 15px;
+      }
+    }
   }
 }

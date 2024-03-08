@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, List, TeamInfo } from "@/components"
+import { Header, List, TeamInfo, BattleInfo } from "@/components"
 import style from "./index.less"
 
 interface IProps { }
@@ -13,7 +13,14 @@ const Index: React.FC<IProps> = () => {
         <List title="攻击队排名" type="red" collapse={false} />
         <List title="防守队排名" type="blue" collapse={false} />
       </div>
-      <div className={style.middle}></div>
+      <div className={style.middle}>
+        <div className={style.battleContent}>
+          <BattleInfo type="resource" count={8} />
+          <BattleInfo type="attack" count={23} />
+          <BattleInfo type="defense" count={15} />
+        </div>
+        <div></div>
+      </div>
       <div className={style.right}></div>
 
     </div>
