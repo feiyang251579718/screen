@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import VirtualList, { ListRef } from 'rc-virtual-list';
-import { Tooltip } from 'antd';
 import { useSize } from 'ahooks';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
@@ -9,15 +8,25 @@ import style from './style.less';
 
 interface IProps {}
 
+enum ActionType {
+  whit,
+  black,
+}
+
 interface ResultMessage {
   startTime: number | string;
-  title: string;
+  title: Array<string>;
+  action: string;
+  actionType: ActionType;
 }
+
 const WarnList: React.FC<IProps> = () => {
   const [warnList, setWarnList] = useState<ResultMessage[]>(
     new Array(1000).fill(1).map((item, index) => ({
       startTime: new Date().getTime(),
-      title: 'SSH账号暴力破解试点范围VS的服务费',
+      title: ['黑客帝国的大帝队 提交了一份', ' 的防守报告'],
+      action: '白名单加固',
+      actionType: index % 3 === 0 ? ActionType.whit : ActionType.black,
       key: index,
     })),
   );
@@ -43,7 +52,17 @@ const WarnList: React.FC<IProps> = () => {
                   {parseTime(item.startTime, 'HH:mm:ss')}
                 </div>
                 <div className={style.title}>
-                  <Tooltip title={item.title}>{item.title}</Tooltip>
+                  黑客帝国的大帝队 提交了一份
+                  <span
+                    className={
+                      item.actionType === ActionType.black
+                        ? style.black
+                        : style.white
+                    }
+                  >
+                    【{item.action}】
+                  </span>
+                  的防守报告
                 </div>
               </div>
             )}

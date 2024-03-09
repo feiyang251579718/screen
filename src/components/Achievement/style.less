@@ -6,14 +6,14 @@
 
   .list {
     .listItem {
-      height: 28px;
+      min-height: 28px;
       font-family: PingFangSC, PingFang SC;
       font-weight: 400;
       font-size: 14px;
       color: #ffffff;
       line-height: 28px;
       text-align: center;
-      align-items: center;
+      align-items: start;
       font-style: normal;
       display: flex;
       width: 100%;
@@ -29,35 +29,14 @@
 
       .title {
         flex: 1 1 0;
-        color: #fc4141;
-        overflow: hidden;
+        text-align: left;
 
-        span {
-          display: inline-block;
-          width: 100%;
-          &:extend(.ellipsis);
+        .white {
+          color: @color-success;
         }
-      }
 
-      .terminal {
-        flex: 0 0 85px;
-        overflow: hidden;
-
-        span {
-          &:extend(.ellipsis);
-          display: inline-block;
-          width: 100%;
-        }
-      }
-
-      .type {
-        flex: 0 0 104px;
-        overflow: hidden;
-
-        span {
-          &:extend(.ellipsis);
-          width: 100%;
-          display: inline-block;
+        .black {
+          color: @color-error;
         }
       }
     }

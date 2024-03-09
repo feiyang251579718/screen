@@ -1,28 +1,38 @@
 @color-white: #fff;
 @color-black: #000;
-@color-blue : #7EC4FD;
-@color-red : #FC4141;
+@color-blue: #7ec4fd;
+@color-red: #fc4141;
+@color-error: #df1030;
+@color-success: #a8bbff;
 
 @card-width: 410px;
 @card-width-large: 450px;
 
 .cardBorder {
-    border-top: 2px solid;
-    border-image: linear-gradient(90deg, rgba(109, 135, 255, 0), rgba(119, 155, 255, 1), rgba(156, 226, 255, 1), rgba(109, 143, 255, 1), rgba(99, 126, 255, 0)) 2 2;
+  border-top: 2px solid;
+  border-image: linear-gradient(
+      90deg,
+      rgba(109, 135, 255, 0),
+      rgba(119, 155, 255, 1),
+      rgba(156, 226, 255, 1),
+      rgba(109, 143, 255, 1),
+      rgba(99, 126, 255, 0)
+    )
+    2 2;
 }
 
 .colorBlue {
-    color: @color-blue;
+  color: @color-blue;
 }
 
 .colorRed {
-    color: @color-red;
+  color: @color-red;
 }
 
 .ellipsis {
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    white-space: nowrap;
-    word-break: break-all;
-    overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: nowrap;
+  word-break: break-all;
+  overflow: hidden;
 }
