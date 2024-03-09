@@ -1,5 +1,178 @@
 @import url('~@/theme.less');
 
 .result {
-    height: 315px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 255px;
+  background-size: 100% 100%;
+
+  &.succesed {
+    background-image: url('../../assets/img/result_victory.png');
+
+    .totalInfo {
+      background-image: url('../../assets/img/result_target_info_succesed.png');
+
+      .num {
+        text-shadow: 0px -2px 3px rgba(97, 212, 255, 0.78);
+        background: linear-gradient(
+          90deg,
+          rgba(42, 87, 176, 0.28) 0%,
+          #3d67f5 50%,
+          rgba(36, 83, 171, 0.15) 100%
+        );
+      }
+    }
+
+    .list {
+      background-image: url('../../assets/img/result_target_bg_succesed.png');
+
+      .item {
+        background-image: url('../../assets/img/result_target_cell_bg_succesed.png');
+      }
+    }
+  }
+
+  &.failed {
+    background-image: url('../../assets/img/result_victory.png');
+
+    .totalInfo {
+      background-image: url('../../assets/img/result_target_info_failed.png');
+
+      .num {
+        text-shadow: 0px -2px 3px rgba(255, 107, 107, 0.78);
+        background: linear-gradient(
+          90deg,
+          rgba(176, 42, 42, 0.01) 0%,
+          #f53d3d 53%,
+          rgba(171, 36, 36, 0.02) 100%
+        );
+        border-image: linear-gradient(
+            90deg,
+            rgba(255, 109, 109, 0),
+            rgba(226, 59, 59, 1),
+            rgba(255, 135, 135, 1),
+            rgba(226, 59, 59, 1),
+            rgba(255, 99, 99, 0)
+          )
+          2 2;
+      }
+    }
+
+    .list {
+      background-image: url('../../assets/img/result_target_bg_failed.png');
+
+      .item {
+        background-image: url('../../assets/img/result_target_cell_bg_failed.png');
+      }
+    }
+  }
+
+  .team {
+    text-align: center;
+
+    .teamTitle {
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 600;
+      font-size: 24px;
+      color: #ffffff;
+      padding: 11px;
+      line-height: 33px;
+      text-align: center;
+      font-style: normal;
+    }
+  }
+
+  .content {
+    display: flex;
+    height: calc(100% - 55px);
+
+    .left,
+    .right {
+      flex: 1;
+      width: 0;
+      display: flex;
+      padding-left: 80px;
+      align-items: center;
+
+      .totalInfo {
+        background-size: 100% 100%;
+        width: 144px;
+        height: 150px;
+        padding-top: 12px;
+
+        .num {
+          border-bottom: 2px solid;
+          border-top: 2px solid;
+          font-family: SourceHanSansCN, SourceHanSansCN;
+          margin-top: 12px;
+          font-weight: 800;
+          font-size: 40px;
+          color: #ffffff;
+          line-height: 41px;
+          text-align: center;
+          font-style: normal;
+        }
+
+        .desc {
+          color: white;
+          text-align: center;
+          width: 100%;
+          padding-top: 8px;
+
+          .title {
+            font-family: PingFangSC, PingFang SC;
+            font-weight: 600;
+            font-size: 22px;
+            color: #ffffff;
+            line-height: 30px;
+            font-style: normal;
+          }
+
+          .info {
+            height: 22px;
+            padding-top: 4px;
+            font-family: PingFangSC, PingFang SC;
+            font-weight: 400;
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 22px;
+            font-style: normal;
+          }
+        }
+      }
+
+      .list {
+        width: 600px;
+        height: 150px;
+        background-size: 100% 100%;
+        display: flex;
+        padding: 14px 18px 8px;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .item {
+          width: 160px;
+          height: 56px;
+          background-size: 100% 100%;
+          margin: 0px 20px 0 0;
+
+          .name {
+            display: flex;
+            height: 100%;
+            padding: 0px 10px 0 60px;
+            align-items: center;
+            justify-content: center;
+            font-family: PingFangSC, PingFang SC;
+            font-weight: 400;
+            font-size: 14px;
+            color: #ffffff;
+            line-height: 17px;
+            text-align: justify;
+            font-style: normal;
+          }
+        }
+      }
+    }
+  }
 }
