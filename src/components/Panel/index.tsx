@@ -1,15 +1,28 @@
 import React, { useMemo } from 'react'
-import style from "./style.less"
 import cls from "classnames"
+import style from "./style.less"
 
 interface IProps {
     title: string
     collapse?: boolean
+    size?: 'small' | 'medium' | 'large'
 }
 
-const List: React.FC<IProps> = ({ title, collapse, children }) => {
+const List: React.FC<IProps> = ({ title, collapse, size, children }) => {
     const hasCollapse = useMemo(() => typeof collapse === 'boolean', [collapse])
-    return <div className={style.panel}>
+    const panelSize = useMemo(() => {
+        switch (size) {
+            case 'small':
+                return style.panelSmall
+            case 'medium':
+                return style.panelMedium
+            case 'large':
+                return style.panelLarge
+            default:
+                return style.panel
+        }
+    }, [size])
+    return <div className={cls(style.panel, panelSize)}>
         <div className={style.header}>
             {
                 hasCollapse && <div className={style.collapse} />

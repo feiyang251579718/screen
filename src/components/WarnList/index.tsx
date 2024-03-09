@@ -6,7 +6,7 @@ import style from "./style.less"
 interface IProps { }
 
 const WarnList: React.FC<IProps> = () => {
-    return <Panel title="安全告警">
+    return <Panel title="安全告警" size='large' collapse={false}>
         <div className={style.warnList}>
             <EmptyData />
         </div>
