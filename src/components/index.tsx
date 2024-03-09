@@ -1,8 +1,9 @@
-export { default as Header } from "./Header"
-export { default as Panel } from "./Panel"
-export { default as List } from "./List"
-export { default as TeamInfo } from "./TeamInfo"
-export { default as BattleInfo } from "./BattleInfo"
-export { default as PieCard } from "./PieCard"
-export { default as WarnList } from "./WarnList"
-export { default as Result } from "./Result"
+export { default as Header } from './Header';
+export { default as Panel } from './Panel';
+export { default as List } from './List';
+export { default as TeamInfo } from './TeamInfo';
+export { default as BattleInfo } from './BattleInfo';
+export { default as PieCard } from './PieCard';
+export { default as WarnList } from './WarnList';
+export { default as Result } from './Result';
+export { default as Achievement } from './Achievement';
