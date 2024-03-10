@@ -21,7 +21,29 @@ const Result: React.FC<IProps> = () => {
         <div className={style.teamTitle}>黑客帝国1队</div>
       </div>
       <div className={style.content}>
-        <div className={style.left}></div>
+        <div className={style.left}>
+          <div className={style.teamInfo}>
+            <div className={cls(style.icon, style.rank)} />
+            <div className={style.text}>
+              <div className={style.num}>5</div>
+              <div className={style.desc}>队伍排名</div>
+            </div>
+          </div>
+          <div className={style.teamInfo}>
+            <div className={cls(style.icon, style.report)} />
+            <div className={style.text}>
+              <div className={style.num}>25</div>
+              <div className={style.desc}>报告通过次数</div>
+            </div>
+          </div>
+          <div className={style.teamInfo}>
+            <div className={cls(style.icon, style.score)} />
+            <div className={style.text}>
+              <div className={style.num}>3456</div>
+              <div className={style.desc}>队伍总分</div>
+            </div>
+          </div>
+        </div>
         <div className={style.right}>
           <div className={style.totalInfo}>
             <div className={style.num}>8</div>
