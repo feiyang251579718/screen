@@ -42,9 +42,7 @@ const Index: React.FC<IProps> = () => {
         <div className={style.middle}>
           {battleStatus !== BattleStatus.End && (
             <div className={style.battleContent}>
-              <BattleInfo type="resource" count={8} />
-              <BattleInfo type="attack" count={23} />
-              <BattleInfo type="defense" count={15} />
+              <BattleInfo />
             </div>
           )}
           <div></div>
