@@ -1,27 +1,35 @@
 import React, { useMemo } from 'react';
 import Panel from '../Panel';
+import { RequestUrl } from '@/utlis';
+
 import style from './style.less';
 
 interface IProps {
   title: string;
-  type: 'red' | 'blue';
+  type: 'attacker' | 'defender';
   collapse?: boolean;
   showType?: 'member' | 'rank';
 }
 
 interface TeamData {
-  name: string;
+  teamName: string;
   score: number;
-  rank: number;
-  memberNum: number;
+  rankNum: number;
+  teamMemberNum: number;
 }
 
 const List: React.FC<IProps> = ({ title, type, collapse, showType }) => {
+  // 请求地址
+  const queryUrl = useMemo(
+    () =>
+      type === 'attacker' ? RequestUrl.attackerRanks : RequestUrl.defenderInfo,
+    [type],
+  );
   const listData = new Array<TeamData>(10).fill({
-    name: '黑客',
+    teamName: '黑客',
     score: 23841,
-    rank: 1,
-    memberNum: 2,
+    rankNum: 1,
+    teamMemberNum: 2,
   });
   const columns = useMemo(() => {
     if (showType === 'member') {
@@ -32,9 +40,11 @@ const List: React.FC<IProps> = ({ title, type, collapse, showType }) => {
           render: (record: TeamData) => {
             return (
               <div
-                className={type === 'red' ? style.colorRed : style.colorBlue}
+                className={
+                  type === 'attacker' ? style.colorRed : style.colorBlue
+                }
               >
-                {record.name}
+                {record.teamName}
               </div>
             );
           },
@@ -43,7 +53,7 @@ const List: React.FC<IProps> = ({ title, type, collapse, showType }) => {
           label: '队员总数',
           dataIndex: 'memberNum',
           render: (record: TeamData) => {
-            return <div>{record.memberNum}</div>;
+            return <div>{record.teamMemberNum}</div>;
           },
         },
       ];
@@ -54,7 +64,7 @@ const List: React.FC<IProps> = ({ title, type, collapse, showType }) => {
         dataIndex: 'rank',
         width: 60,
         render: (record: TeamData) => {
-          return <div>{record.rank}</div>;
+          return <div>{record.rankNum}</div>;
         },
       },
       {
@@ -62,8 +72,10 @@ const List: React.FC<IProps> = ({ title, type, collapse, showType }) => {
         dataIndex: 'name',
         render: (record: TeamData) => {
           return (
-            <div className={type === 'red' ? style.colorRed : style.colorBlue}>
-              {record.name}
+            <div
+              className={type === 'attacker' ? style.colorRed : style.colorBlue}
+            >
+              {record.teamName}
             </div>
           );
         },
