@@ -21,7 +21,7 @@ enum BattleStatus {
 
 const Index: React.FC<IProps> = () => {
   const battleStatus: BattleStatus = useMemo(() => {
-    return BattleStatus.Start;
+    return BattleStatus.End;
   }, []);
   return (
     <div className={style.bg}>
@@ -55,7 +55,7 @@ const Index: React.FC<IProps> = () => {
           </div>
         )}
       </div>
-      {battleStatus == BattleStatus.End && <Result />}
+      {battleStatus == BattleStatus.End && <Result type="attacker" />}
     </div>
   );
 };

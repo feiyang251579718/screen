@@ -1,19 +1,33 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import cls from 'classnames';
+import { TeamDetail } from '@/types';
 import style from './style.less';
 
-interface IProps {}
+interface IProps {
+  type: 'attacker' | 'defender';
+}
 
-const Result: React.FC<IProps> = () => {
+const Result: React.FC<IProps> = ({ type }) => {
+  const [teamInfo, setTeamInfo] = useState<TeamDetail>();
+
   const list = useMemo(() => {
     return new Array(6).fill(3).map((item, index) => ({
       name: index === 0 ? '靶标资产名称是的范德萨发' : '靶标资产名',
     }));
   }, []);
 
-  const typeCls = useMemo(() => {
-    return style.failed;
+  useEffect(() => {
+    setTeamInfo({
+      teamName: '黑客帝国1队',
+      reportNum: 123,
+      score: 123,
+      rankNum: 1,
+    });
   }, []);
+
+  const typeCls = useMemo(() => {
+    return type === 'defender' ? style.success : style.failed;
+  }, [type]);
 
   return (
     <div className={cls(style.result, typeCls)}>
@@ -25,28 +39,28 @@ const Result: React.FC<IProps> = () => {
           <div className={style.teamInfo}>
             <div className={cls(style.icon, style.rank)} />
             <div className={style.text}>
-              <div className={style.num}>5</div>
+              <div className={style.num}>{teamInfo?.rankNum}</div>
               <div className={style.desc}>队伍排名</div>
             </div>
           </div>
           <div className={style.teamInfo}>
             <div className={cls(style.icon, style.report)} />
             <div className={style.text}>
-              <div className={style.num}>25</div>
+              <div className={style.num}>{teamInfo?.reportNum}</div>
               <div className={style.desc}>报告通过次数</div>
             </div>
           </div>
           <div className={style.teamInfo}>
             <div className={cls(style.icon, style.score)} />
             <div className={style.text}>
-              <div className={style.num}>3456</div>
+              <div className={style.num}>{teamInfo?.score}</div>
               <div className={style.desc}>队伍总分</div>
             </div>
           </div>
         </div>
         <div className={style.right}>
           <div className={style.totalInfo}>
-            <div className={style.num}>8</div>
+            <div className={style.num}>{teamInfo?.score}</div>
             <div className={style.desc}>
               <div className={style.title}>被防守</div>
               <div className={style.info}>靶标信息</div>

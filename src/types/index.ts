@@ -5,6 +5,13 @@ export interface TeamInfo {
   teamMemberNum: number;
 }
 
+export interface TeamDetail {
+  rankNum: number;
+  score: number;
+  reportNum: number;
+  teamName: string;
+}
+
 export interface AlarmStatic {
   exerciseId: number;
   infoSecurity: string;
