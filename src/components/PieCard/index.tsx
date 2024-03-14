@@ -66,7 +66,7 @@ const PieCard: React.FC<IProps> = () => {
   );
   const hasData = false;
   return (
-    <Panel title="威胁分析" collapse={false} size="large">
+    <Panel title="威胁分析" collapse={false} size="medium">
       <div className={style.pieCard}>
         <div className={style.pieContent}>
           <PieChart data={pieData} />

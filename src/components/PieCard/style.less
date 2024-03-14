@@ -1,109 +1,96 @@
 @import url('~@/theme.less');
 
 .pieCard {
-    height: 169px;
-    display: flex;
-    padding: 8px 5px 0;
+  height: 169px;
+  display: flex;
+  padding: 8px 5px 0;
 
-    .pieContent {
-        width: 160px;
-        height: 160px;
-        background: #091946;
-        border-radius: 11px;
+  .pieContent {
+    width: 160px;
+    height: 160px;
+    border-radius: 11px;
+    position: relative;
+    background-image: url(../../assets/img/bg_pie.png);
+    background-size: 100% 100%;
+  }
+
+  .dataContent {
+    margin-left: 30px;
+    flex: 1 1 0;
+
+    .list {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      height: 100%;
+
+      .listItem {
+        background-image: url(../../assets/img/pieItem.png);
+        background-size: 100% 100%;
+        padding: 0 11px;
+        display: flex;
+        align-items: center;
+        height: 30px;
         position: relative;
-        border: 1px solid #63D9FB;
-        // clip-path: polygon(10px 0px, 150px 0px, 160px 10px, 160px 150px, 150px 160px, 10px 160px, 0px 150px, 0px 10px);
 
-        // &::after {
-        //     content: '';
-        //     position: absolute;
-        //     width: 230px;
-        //     height: 230px;
-        //     background: #091946;
-        //     border: 1px solid #63D9FB;
-        //     left: 0;
-        //     right: 0;
-        //     transform: rotate(45deg);
-        // }
-    }
+        .listItemTitle {
+          font-family: PingFangSC, PingFang SC;
+          font-weight: 500;
+          font-size: 14px;
+          color: #ffffff;
+          line-height: 20px;
+          text-align: center;
+          font-style: normal;
+          position: relative;
+          z-index: 100;
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
 
-    .dataContent {
-        margin-left: 30px;
-        flex: 1 1 0;
+          .title {
+            flex: 1 1 auto;
+          }
 
-        .list {
-            display: flex;
-            justify-content: space-between;
-            flex-direction: column;
-            height: 100%;
-
-            .listItem {
-                background-image: url(../../assets/img/pieItem.png);
-                background-size: 100% 100%;
-                padding: 0 11px;
-                display: flex;
-                align-items: center;
-                height: 30px;
-                position: relative;
-
-                .listItemTitle {
-                    font-family: PingFangSC, PingFang SC;
-                    font-weight: 500;
-                    font-size: 14px;
-                    color: #FFFFFF;
-                    line-height: 20px;
-                    text-align: center;
-                    font-style: normal;
-                    position: relative;
-                    z-index: 100;
-                    display: flex;
-                    justify-content: space-between;
-                    width: 100%;
-
-                    .title {
-                        flex: 1 1 auto;
-                    }
-
-                    .percent {
-                        flex: 0 0 20px;
-                    }
-                }
-
-                .itemProgress {
-                    position: absolute;
-                    height: 100%;
-                    width: calc(100% -10px);
-                    left: 5px;
-                    border-top: 2px solid #09D38F;
-                    border-bottom: 2px solid #09D38F;
-                    top: 0;
-                    box-shadow: 0px 1px 7px 0px #50FBC1;
-                }
-
-                .itemBlue {
-                    border-color: #0BCBF9;
-                    background: rgba(11, 203, 249, 0.6);
-                    box-shadow: 0px 1px 7px 0px #5BDFFF;
-                }
-
-                .itemGreen {
-                    border-color: #09D38F;
-                    background: rgba(9, 211, 143, 0.6);
-                    box-shadow: 0px 1px 7px 0px #50FBC1;
-                }
-
-                .itemPurple {
-                    border-color: #6546FE;
-                    background: rgba(81, 51, 226, 0.6);
-                    box-shadow: 0px 2px 7px 0px #9250FB;
-                }
-
-                .itemYellow {
-                    border-color: #FFDB51;
-                    background: rgba(207, 151, 27, 0.6);
-                    box-shadow: 0px 2px 7px 0px #FFDB51;
-                }
-            }
+          .percent {
+            flex: 0 0 20px;
+          }
         }
+
+        .itemProgress {
+          position: absolute;
+          height: 100%;
+          width: calc(100% -10px);
+          left: 5px;
+          border-top: 2px solid #09d38f;
+          border-bottom: 2px solid #09d38f;
+          top: 0;
+          box-shadow: 0px 1px 7px 0px #50fbc1;
+        }
+
+        .itemBlue {
+          border-color: #0bcbf9;
+          background: rgba(11, 203, 249, 0.6);
+          box-shadow: 0px 1px 7px 0px #5bdfff;
+        }
+
+        .itemGreen {
+          border-color: #09d38f;
+          background: rgba(9, 211, 143, 0.6);
+          box-shadow: 0px 1px 7px 0px #50fbc1;
+        }
+
+        .itemPurple {
+          border-color: #6546fe;
+          background: rgba(81, 51, 226, 0.6);
+          box-shadow: 0px 2px 7px 0px #9250fb;
+        }
+
+        .itemYellow {
+          border-color: #ffdb51;
+          background: rgba(207, 151, 27, 0.6);
+          box-shadow: 0px 2px 7px 0px #ffdb51;
+        }
+      }
     }
+  }
 }
