@@ -8,7 +8,7 @@ export const RequestUrl = {
   // 攻击类型
   alarmDetail: '/targetRangeBigScreen/getAlarmDetailStatistic',
   //基础信息
-  basicInformation: ' /targetRangeBigScreen/basicInformation',
+  basicInformation: '/targetRangeBigScreen/basicInformation',
   //资产攻防信息-资产数量、攻击报告通过数、防守报告通过数
   targetCount: '/targetRangeBigScreen/getTargetAndAttackAndDefenseCount',
 };

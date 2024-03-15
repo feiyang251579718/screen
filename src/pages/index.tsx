@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import {
   Header,
   List,
@@ -9,6 +9,10 @@ import {
   Achievement,
   Result,
 } from '@/components';
+import { BasicInformation } from '@/types';
+import { RequestUrl } from '@/utlis';
+import useRequest from '@/hooks/useRequest';
+
 import style from './index.less';
 
 interface IProps {}
@@ -22,6 +26,19 @@ enum BattleStatus {
 const Index: React.FC<IProps> = () => {
   const battleStatus: BattleStatus = useMemo(() => {
     return BattleStatus.End;
+  }, []);
+  const { get } = useRequest();
+
+  const refetch = useCallback(() => {
+    return get<BasicInformation>(
+      `${RequestUrl.basicInformation}?exerciseId=${10000153}`,
+    ).then((response) => {
+      console.log('object :>> ', response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    refetch();
   }, []);
   return (
     <div className={style.bg}>
