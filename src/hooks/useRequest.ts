@@ -33,17 +33,18 @@ const useRequest = () => {
     url: string,
     params?: { [key: string]: string },
   ) {
+    const exerciseId = '10000153';
     const headers = {
       appId: '10001',
       deviceType: 'PC',
       deviceId: 'bigscreen',
-      APP_KEY: '111fbbbac2cd416dba1c11396e6eccd5=',
+      appkey: '111fbbbac2cd416dba1c11396e6eccd5=',
       timestamp: `${Date.now()}`,
       version: '1.0.0',
       nonce: generateSixDigitRandomNumberWithLeadingZeros(),
       Authorization: Authorization,
     };
-    const bundleStr = buildStr({ ...headers, ...params, uri: url });
+    const bundleStr = buildStr({ ...headers, ...params, exerciseId, uri: url });
     console.log('object :>> ', headers);
     console.log('buildStr :>> ', bundleStr);
     const signature = encode(bundleStr);

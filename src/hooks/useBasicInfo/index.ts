@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { BasicInformation } from '@/types';
 import useRequest from '../useRequest';
-import { RequestUrl } from '@/utlis';
+import { RequestUrl } from '@/utils';
 import { useContext } from 'react';
 import { ConfigContext } from './BasicInfoProvider';
 

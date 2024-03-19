@@ -1,6 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { TargetCount } from '@/types';
 import style from './style.less';
+import { useRequest } from '@/hooks';
+import { RequestUrl } from '@/utils';
 
 interface IProps {}
 interface ItemIProps {
@@ -31,12 +33,19 @@ const BattleItem: React.FC<ItemIProps> = ({ type, count }) => {
 
 const BattleInfo: React.FC<IProps> = () => {
   const [battInfo, setBattleInfo] = useState<TargetCount>();
-  useEffect(() => {
-    setBattleInfo({
-      targetHostCount: 19,
-      attackReportCount: 11,
-      defenseReportCount: 10,
+  const { get } = useRequest();
+  const queryData = useCallback(() => {
+    get<TargetCount>(RequestUrl.targetCount).then((data) => {
+      // setBattleInfo(data.data);
+      setBattleInfo({
+        targetHostCount: 19,
+        attackReportCount: 11,
+        defenseReportCount: 10,
+      });
     });
+  }, []);
+  useEffect(() => {
+    queryData();
   }, []);
   return (
     <>

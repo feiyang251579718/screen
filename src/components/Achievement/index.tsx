@@ -3,7 +3,7 @@ import VirtualList, { ListRef } from 'rc-virtual-list';
 import { useSize } from 'ahooks';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
-import { parseTime } from '@/utlis';
+import { parseTime } from '@/utils';
 import style from './style.less';
 
 interface IProps {}

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import Panel from '../Panel';
-import { RequestUrl } from '@/utlis';
+import { RequestUrl } from '@/utils';
 
 import style from './style.less';
 
