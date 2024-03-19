@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Panel from '../Panel';
 import { RequestUrl } from '@/utils';
+import { useRequest } from '@/hooks';
 
 import style from './style.less';
 
@@ -25,12 +26,32 @@ const List: React.FC<IProps> = ({ title, type, collapse, showType }) => {
       type === 'attacker' ? RequestUrl.attackerRanks : RequestUrl.defenderInfo,
     [type],
   );
-  const listData = new Array<TeamData>(10).fill({
-    teamName: '黑客',
-    score: 23841,
-    rankNum: 1,
-    teamMemberNum: 2,
-  });
+  const [listData, setListData] = useState<TeamData[]>([]);
+  const { get } = useRequest();
+
+  const queryData = useCallback(() => {
+    get<TeamData[]>(queryUrl).then((res) => {
+      // setListData(res.data)
+      setListData(
+        new Array<TeamData>(10)
+          .fill({
+            teamName: '黑客',
+            score: 23841,
+            rankNum: 1,
+            teamMemberNum: 2,
+          })
+          .map((item, index) => ({
+            ...item,
+            teamName: `黑客000${index}`,
+          })),
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    queryData();
+  }, []);
+
   const columns = useMemo(() => {
     if (showType === 'member') {
       return [
