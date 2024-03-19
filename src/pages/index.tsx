@@ -30,9 +30,9 @@ const Index: React.FC<IProps> = () => {
   const { get } = useRequest();
 
   const refetch = useCallback(() => {
-    return get<BasicInformation>(
-      `${RequestUrl.basicInformation}?exerciseId=${10000153}`,
-    ).then((response) => {
+    return get<BasicInformation>(RequestUrl.basicInformation, {
+      exerciseId: '10000153',
+    }).then((response) => {
       console.log('object :>> ', response.data);
     });
   }, []);
