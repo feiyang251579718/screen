@@ -9,10 +9,7 @@ import {
   Achievement,
   Result,
 } from '@/components';
-import { BasicInformation } from '@/types';
-import { RequestUrl } from '@/utlis';
-import useRequest from '@/hooks/useRequest';
-
+import { useBasicInfo } from '@/hooks';
 import style from './index.less';
 
 interface IProps {}
@@ -27,18 +24,10 @@ const Index: React.FC<IProps> = () => {
   const battleStatus: BattleStatus = useMemo(() => {
     return BattleStatus.End;
   }, []);
-  const { get } = useRequest();
-
-  const refetch = useCallback(() => {
-    return get<BasicInformation>(RequestUrl.basicInformation, {
-      exerciseId: '10000153',
-    }).then((response) => {
-      console.log('object :>> ', response.data);
-    });
-  }, []);
-
+  const { refetch } = useBasicInfo();
   useEffect(() => {
-    refetch();
+    console.log('refetch :>> ', refetch);
+    refetch?.();
   }, []);
   return (
     <div className={style.bg}>

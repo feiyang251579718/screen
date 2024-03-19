@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { memo } from 'react';
+import BasicInfoProvider from '@/hooks/useBasicInfo/BasicInfoProvider';
+import { useQueryBasicInfo } from '@/hooks';
 
 interface IProps {
-    children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 const Main: React.FC<IProps> = ({ children }) => {
-    return <div className="mainBody">{children}</div>
-}
+  const { data, refetch } = useQueryBasicInfo();
+  return (
+    <BasicInfoProvider basicData={data} refetch={refetch}>
+      <div className="mainBody">{children}</div>
+    </BasicInfoProvider>
+  );
+};
 
-export default Main
+export default memo(Main);
