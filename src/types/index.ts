@@ -67,3 +67,29 @@ export interface WarnMessage {
   teamName: string;
   content: string;
 }
+
+export interface AreaTargets {
+  id: number;
+  isMatch: number;
+  keyOnly: number;
+  nodeId: string;
+  subTargets: {
+    assetName: string;
+    identifyByTimestamp: number;
+    targetId: number;
+    targetType: number;
+  }[];
+  targetId: number;
+}
+
+export interface AttackInfo {
+  teamName: string;
+  reportId: number;
+  reportName: string;
+  teamId: number;
+  time: string;
+  isMatchAreaTargets: AreaTargets[];
+  roleType: 1 | 2 | 3; //队伍类型（1：攻击方；2：防守方；3：裁判）
+  type: 1 | 2; //报告状态：1-提交报告，2-审核通过报告
+  content: string;
+}
