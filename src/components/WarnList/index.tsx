@@ -4,27 +4,22 @@ import { Tooltip } from 'antd';
 import { useSize } from 'ahooks';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
+import { WarnMessage } from '@/types';
 import { RequestUrl, parseTime } from '@/utils';
 import { useRequest } from '@/hooks';
 
 import style from './style.less';
 interface IProps {}
 
-interface WarnMessage {
-  startTime: number | string;
-  title: string;
-  terminal: string;
-  type: string;
-}
 const WarnList: React.FC<IProps> = () => {
   const { get } = useRequest();
   const [warnList, setWarnList] = useState<WarnMessage[]>(
     new Array(1000).fill(1).map((item, index) => ({
-      startTime: new Date().getTime(),
-      title: 'SSH账号暴力破解试点范围VS的服务费',
-      terminal: '红色诺基亚手机',
-      key: index,
-      type: `DMZ-Web2004-${index}`,
+      time: parseTime(new Date().getTime(), 'HH:mm'),
+      infosecurityName: 'SSH账号暴力破解试点范围VS的服务费',
+      isBeAttackTargetName: '红色诺基亚手机',
+      teamName: `${index}`,
+      content: `DMZ-Web2004-${index}`,
     })),
   );
   const queryData = useCallback(() => {
@@ -48,17 +43,19 @@ const WarnList: React.FC<IProps> = () => {
           >
             {(item, index) => (
               <div className={style.listItem} key={index}>
-                <div className={style.time}>
-                  {parseTime(item.startTime, 'HH:mm')}
-                </div>
+                <div className={style.time}>{item.time}</div>
                 <div className={style.title}>
-                  <Tooltip title={item.title}>{item.title}</Tooltip>
+                  <Tooltip title={item.infosecurityName}>
+                    {item.infosecurityName}
+                  </Tooltip>
                 </div>
                 <div className={style.terminal}>
-                  <Tooltip title={item.terminal}>{item.terminal}</Tooltip>
+                  <Tooltip title={item.isBeAttackTargetName}>
+                    {item.isBeAttackTargetName}
+                  </Tooltip>
                 </div>
                 <div className={style.type}>
-                  <Tooltip title={item.type}>{item.type}</Tooltip>
+                  <Tooltip title={item.content}>{item.content}</Tooltip>
                 </div>
               </div>
             )}

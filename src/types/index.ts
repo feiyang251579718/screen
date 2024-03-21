@@ -52,3 +52,18 @@ export interface ResponseData<T> {
   timestamp: number;
   data: T;
 }
+
+export interface PieData {
+  infoSecurity: string;
+  countStatistic: number;
+  statisticRate: number;
+  infoSecurityName: string;
+}
+
+export interface WarnMessage {
+  isBeAttackTargetName: string; //被攻击靶标名称（或者IP）
+  infosecurityName: string; //事件大类名称（威胁类型）
+  time: string;
+  teamName: string;
+  content: string;
+}
