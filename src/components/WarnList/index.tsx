@@ -1,12 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import VirtualList, { ListRef } from 'rc-virtual-list';
 import { Tooltip } from 'antd';
 import { useSize } from 'ahooks';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
-import { parseTime } from '@/utils';
-import style from './style.less';
+import { RequestUrl, parseTime } from '@/utils';
+import { useRequest } from '@/hooks';
 
+import style from './style.less';
 interface IProps {}
 
 interface WarnMessage {
@@ -16,6 +17,7 @@ interface WarnMessage {
   type: string;
 }
 const WarnList: React.FC<IProps> = () => {
+  const { get } = useRequest();
   const [warnList, setWarnList] = useState<WarnMessage[]>(
     new Array(1000).fill(1).map((item, index) => ({
       startTime: new Date().getTime(),
@@ -25,6 +27,9 @@ const WarnList: React.FC<IProps> = () => {
       type: `DMZ-Web2004-${index}`,
     })),
   );
+  const queryData = useCallback(() => {
+    get<WarnMessage[]>(RequestUrl.alarmDetail);
+  }, []);
   const listRef = useRef<HTMLDivElement>(null);
   const size = useSize(listRef);
   const vListRef = useRef<ListRef>(null);

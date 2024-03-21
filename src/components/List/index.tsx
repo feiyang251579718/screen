@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Panel from '../Panel';
 import { RequestUrl } from '@/utils';
-import { useRequest } from '@/hooks';
+import { useRequest, useQueryBasicInfo } from '@/hooks';
 
 import style from './style.less';
 
@@ -9,7 +9,6 @@ interface IProps {
   title: string;
   type: 'attacker' | 'defender';
   collapse?: boolean;
-  showType?: 'member' | 'rank';
 }
 
 interface TeamData {
@@ -19,15 +18,19 @@ interface TeamData {
   teamMemberNum: number;
 }
 
-const List: React.FC<IProps> = ({ title, type, collapse, showType }) => {
+const List: React.FC<IProps> = ({ title, type, collapse }) => {
   // 请求地址
   const queryUrl = useMemo(
     () =>
       type === 'attacker' ? RequestUrl.attackerRanks : RequestUrl.defenderInfo,
     [type],
   );
+  const { data } = useQueryBasicInfo();
   const [listData, setListData] = useState<TeamData[]>([]);
   const { get } = useRequest();
+  const showType = useMemo(() => {
+    return data?.openRankStatus === 1 ? 'rank' : 'member';
+  }, [data]);
 
   const queryData = useCallback(() => {
     get<TeamData[]>(queryUrl).then((res) => {

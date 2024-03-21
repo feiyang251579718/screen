@@ -36,12 +36,7 @@ const Index: React.FC<IProps> = () => {
         {battleStatus !== BattleStatus.End && (
           <div className={style.left}>
             <TeamInfo />
-            <List
-              title="攻击队排名"
-              type="attacker"
-              collapse={false}
-              showType="member"
-            />
+            <List title="攻击队排名" type="attacker" collapse={false} />
             <List title="防守队排名" type="defender" collapse={false} />
           </div>
         )}
