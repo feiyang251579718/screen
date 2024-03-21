@@ -1,6 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import Panel from '../Panel';
 import { RequestUrl } from '@/utils';
+import { useInterval } from 'ahooks';
 import { useRequest, useQueryBasicInfo } from '@/hooks';
 
 import style from './style.less';
@@ -25,6 +32,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
       type === 'attacker' ? RequestUrl.attackerRanks : RequestUrl.defenderRanks,
     [type],
   );
+  const ref = useRef<HTMLDivElement>(null);
   const { data } = useQueryBasicInfo();
   const [listData, setListData] = useState<TeamData[]>([]);
   const { get } = useRequest();
@@ -36,7 +44,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
     get<TeamData[]>(queryUrl).then((res) => {
       // setListData(res.data)
       setListData(
-        new Array<TeamData>(10)
+        new Array<TeamData>(15)
           .fill({
             teamName: '黑客',
             score: 23841,
@@ -114,6 +122,38 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
       },
     ];
   }, [showType]);
+
+  const renderList = useMemo(
+    () => (
+      <div className={listData.length > 10 ? style.listContent : ''}>
+        {listData.map((item, index) => {
+          return (
+            <div className={style.renderItem} key={index}>
+              {columns.map((column, index) => {
+                return (
+                  <div
+                    className={style.itemCell}
+                    style={
+                      column.width
+                        ? {
+                            width: `${column.width}px`,
+                            maxWidth: `${column.width}px`,
+                          }
+                        : undefined
+                    }
+                    key={index}
+                  >
+                    {column.render(item)}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    ),
+    [listData, columns],
+  );
   return (
     <Panel title={title} collapse={collapse}>
       <div className={style.list}>
@@ -135,31 +175,9 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
             </div>
           ))}
         </div>
-        <div className={style.body}>
-          {listData.map((item, index) => {
-            return (
-              <div className={style.renderItem} key={index}>
-                {columns.map((column, index) => {
-                  return (
-                    <div
-                      className={style.itemCell}
-                      style={
-                        column.width
-                          ? {
-                              width: `${column.width}px`,
-                              maxWidth: `${column.width}px`,
-                            }
-                          : undefined
-                      }
-                      key={index}
-                    >
-                      {column.render(item)}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+        <div className={style.body} ref={ref}>
+          {renderList}
+          {listData.length > 10 && renderList}
         </div>
       </div>
     </Panel>
