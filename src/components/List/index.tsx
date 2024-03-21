@@ -22,7 +22,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
   // 请求地址
   const queryUrl = useMemo(
     () =>
-      type === 'attacker' ? RequestUrl.attackerRanks : RequestUrl.defenderInfo,
+      type === 'attacker' ? RequestUrl.attackerRanks : RequestUrl.defenderRanks,
     [type],
   );
   const { data } = useQueryBasicInfo();

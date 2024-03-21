@@ -1,6 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import cls from 'classnames';
 import { TeamDetail } from '@/types';
+import { RequestUrl } from '@/utils';
+import { useRequest } from '@/hooks';
 import style from './style.less';
 
 interface IProps {
@@ -9,6 +11,12 @@ interface IProps {
 
 const Result: React.FC<IProps> = ({ type }) => {
   const [teamInfo, setTeamInfo] = useState<TeamDetail>();
+  const { get } = useRequest();
+  const queryUrl = useMemo(
+    () =>
+      type === 'attacker' ? RequestUrl.attackerInfo : RequestUrl.defenderInfo,
+    [type],
+  );
 
   const list = useMemo(() => {
     return new Array(6).fill(3).map((item, index) => ({
@@ -16,13 +24,20 @@ const Result: React.FC<IProps> = ({ type }) => {
     }));
   }, []);
 
-  useEffect(() => {
-    setTeamInfo({
-      teamName: '黑客帝国1队',
-      reportNum: 123,
-      score: 123,
-      rankNum: 1,
+  const queryData = useCallback(() => {
+    get<TeamDetail>(queryUrl).then((res) => {
+      // setTeamInfo(res.data)
+      setTeamInfo({
+        teamName: '黑客帝国1队',
+        reportNum: 123,
+        score: 123,
+        rankNum: 1,
+      });
     });
+  }, []);
+
+  useEffect(() => {
+    queryData();
   }, []);
 
   const typeCls = useMemo(() => {
