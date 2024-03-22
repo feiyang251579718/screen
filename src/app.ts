@@ -1,5 +1,6 @@
 import * as echarts from 'echarts/core';
 import { PieChart } from 'echarts/charts';
+import { bus } from '@/utils';
 import {
   TitleComponent,
   TooltipComponent,
@@ -20,3 +21,5 @@ echarts.use([
   PieChart,
   CanvasRenderer,
 ]);
+
+window.g_bus = bus;
