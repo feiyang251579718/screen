@@ -26,7 +26,6 @@ const Index: React.FC<IProps> = () => {
   }, []);
   const { refetch } = useBasicInfo();
   useEffect(() => {
-    console.log('refetch :>> ', refetch);
     refetch?.();
   }, []);
   return (

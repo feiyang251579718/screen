@@ -25,6 +25,10 @@
     flex: 0 0 auto;
     font-size: 14px;
     color: @color-white;
+
+    img {
+      height: 39px;
+    }
   }
 
   .title {
@@ -58,6 +62,12 @@
       font-family: AlibabaPuHuiTi_2_105_Heavy;
       text-align: justify;
       font-style: normal;
+
+      :global {
+        .ant-statistic-content {
+          color: @color-white;
+        }
+      }
     }
   }
 }

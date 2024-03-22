@@ -21,7 +21,6 @@ export const useQueryBasicInfo = () => {
       },
     );
   }, []);
-
   return {
     data,
     refetch,

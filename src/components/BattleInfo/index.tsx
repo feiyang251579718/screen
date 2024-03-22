@@ -36,12 +36,7 @@ const BattleInfo: React.FC<IProps> = () => {
   const { get } = useRequest();
   const queryData = useCallback(() => {
     get<TargetCount>(RequestUrl.targetCount).then((data) => {
-      // setBattleInfo(data.data);
-      setBattleInfo({
-        targetHostCount: 19,
-        attackReportCount: 11,
-        defenseReportCount: 10,
-      });
+      setBattleInfo(data.data);
     });
   }, []);
   useEffect(() => {

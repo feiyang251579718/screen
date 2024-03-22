@@ -10,7 +10,7 @@ function encode(message: string) {
   return msgUint8.toString(); // 返回哈希
 }
 
-const buildStr = (obj: { [key: string]: string }) => {
+const buildStr = (obj: { [key: string]: any }) => {
   const resultStr = Object.keys(obj)
     .sort()
     .reduce((str, key) => {
@@ -27,33 +27,39 @@ const generateSixDigitRandomNumberWithLeadingZeros = () => {
 
 const useRequest = () => {
   const Authorization = useMemo(() => {
-    return 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6ImQxYmE2MWI1LWMzNWUtNDc0Zi1iZTE4LTljOTFhYmFiN2NkOCJ9.2SN4qm3k0MvuABVHPbp76ow8eWPZTU_mW8xTKOdayXrmYiZVJnGA1ue-hCrLLGRARo9lYfHhl2T0qCoQIBehYg';
+    return 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6IjFmNTY0Nzk5LTcwYmUtNDcxNS04Mjg2LWEwM2MwY2QxNzcwMCJ9.5y482FiVCAxX9yCepJTK44Wh_UzM8OnNlDs8j1T6zCIyF26AfiOrcFvRI-EXApsCOQTDagmSfqVH0jOg_ELlMA';
   }, []);
   const get = useCallback(function <T>(
     url: string,
     params?: { [key: string]: string },
   ) {
-    const exerciseId = '10000153';
+    const exerciseId = 10000153;
     const headers = {
       appId: '10001',
       deviceType: 'PC',
       deviceId: 'bigscreen',
-      appkey: '111fbbbac2cd416dba1c11396e6eccd5=',
+      appKey: '111fbbbac2cd416dba1c11396e6eccd5',
       timestamp: `${Date.now()}`,
       version: '1.0.0',
       nonce: generateSixDigitRandomNumberWithLeadingZeros(),
       Authorization: Authorization,
     };
-    const bundleStr = buildStr({ ...headers, ...params, exerciseId, uri: url });
-    console.log('object :>> ', headers);
-    console.log('buildStr :>> ', bundleStr);
+    const bundleStr = buildStr({
+      ...headers,
+      ...params,
+      exerciseId,
+      uri: `/college/competition${url}`,
+    });
     const signature = encode(bundleStr);
-    return fetch(`${prefix}${url}?${qs.stringify(params)}`, {
+    return fetch(`${prefix}${url}?${qs.stringify({ ...params, exerciseId })}`, {
       headers: {
         ...headers,
         signature,
       },
-    }).then((response) => response.json() as Promise<ResponseData<T>>);
+    }).then((response) => {
+      const data = response.json() as Promise<ResponseData<T>>;
+      return data;
+    });
   },
   []);
   return {

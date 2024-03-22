@@ -1,11 +1,11 @@
 import React from 'react';
-import { useQueryBasicInfo } from '@/hooks';
+import { useBasicInfo } from '@/hooks';
 import style from './style.less';
 
 interface IProps {}
 
 const TeamInfo: React.FC<IProps> = () => {
-  const { data } = useQueryBasicInfo();
+  const { basicData: data } = useBasicInfo();
   return (
     <div className={style.teamInfo}>
       <div className={style.teamDivider} />

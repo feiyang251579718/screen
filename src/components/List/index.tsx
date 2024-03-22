@@ -7,8 +7,7 @@ import React, {
 } from 'react';
 import Panel from '../Panel';
 import { RequestUrl } from '@/utils';
-import { useInterval } from 'ahooks';
-import { useRequest, useQueryBasicInfo } from '@/hooks';
+import { useRequest, useBasicInfo } from '@/hooks';
 
 import style from './style.less';
 
@@ -33,7 +32,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
     [type],
   );
   const ref = useRef<HTMLDivElement>(null);
-  const { data } = useQueryBasicInfo();
+  const { basicData: data } = useBasicInfo();
   const [listData, setListData] = useState<TeamData[]>([]);
   const { get } = useRequest();
   const showType = useMemo(() => {
@@ -42,7 +41,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
 
   const queryData = useCallback(() => {
     get<TeamData[]>(queryUrl).then((res) => {
-      // setListData(res.data)
+      // setListData(res.data||[])
       setListData(
         new Array<TeamData>(15)
           .fill({

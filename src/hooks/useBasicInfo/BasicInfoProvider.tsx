@@ -5,7 +5,6 @@ import { omit } from 'lodash';
 export interface ConfigProps {
   basicData?: BasicInformation;
   refetch?: () => Promise<BasicInformation>;
-
   children?: React.ReactNode;
 }
 export const ConfigContext = React.createContext<ConfigProps>({});
