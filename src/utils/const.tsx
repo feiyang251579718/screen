@@ -12,3 +12,8 @@ export const RequestUrl = {
   //资产攻防信息-资产数量、攻击报告通过数、防守报告通过数
   targetCount: '/targetRangeBigScreen/getTargetAndAttackAndDefenseCount',
 };
+
+export const host =
+  'https://uat-university-api.sangfor.com/college/competition';
+export const prefix = host;
+export const ws_prefix = `wss://uat-university-api.sangfor.com/college/competition`;

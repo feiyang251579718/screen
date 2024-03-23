@@ -23,7 +23,7 @@ declare module 'react-countdown-hook' {
   export default useCountDown;
 }
 
-interface Window {
+declare interface Window {
   g_bus: any;
 }
 
