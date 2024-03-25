@@ -4,12 +4,14 @@ let conn: WebSocket | undefined = undefined;
 
 const init = (token: string, exerciseId: string) => {
   const socket = new WebSocket(
-    `${ws_prefix}/targetRangeExercise/${token}/${exerciseId}`,
+    // `wss://uat-university-api.sangfor.com/college/socket/targetRangeExercise/eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6Ijg0MjE0Mjk2LTUwMzgtNDNkOC1hNWY1LTQ2MzVkZjM0YWUzMCJ9.RPa8rqEpULBqSEi_MURegS7FOVVVjpFQaWjAcmVv3IGOv5wV4s0-HvMRWv__R4Bcd5QNI8Jvq-Ln9YSyUBn1sw/10000153`,
+    `${ws_prefix}/targetRangeExercise/${token.split(/\s/)?.[1]}/${exerciseId}`,
   );
 
   // Connection opened
   socket.addEventListener('open', function (event) {
-    socket.send('Hello Server!');
+    // socket.send('Hello Server!');
+    console.log('connect');
   });
 
   // Listen for messages

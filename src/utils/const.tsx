@@ -16,4 +16,4 @@ export const RequestUrl = {
 export const host =
   'https://uat-university-api.sangfor.com/college/competition';
 export const prefix = host;
-export const ws_prefix = `wss://uat-university-api.sangfor.com/college/competition`;
+export const ws_prefix = `wss://uat-university-api.sangfor.com/college/socket`;
