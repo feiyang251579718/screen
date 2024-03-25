@@ -41,20 +41,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
 
   const queryData = useCallback(() => {
     get<TeamData[]>(queryUrl).then((res) => {
-      // setListData(res.data||[])
-      setListData(
-        new Array<TeamData>(15)
-          .fill({
-            teamName: '黑客',
-            score: 23841,
-            rankNum: 1,
-            teamMemberNum: 2,
-          })
-          .map((item, index) => ({
-            ...item,
-            teamName: `黑客000${index}`,
-          })),
-      );
+      setListData(res.data || []);
     });
   }, []);
 

@@ -1,11 +1,20 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
+import { AlarmStatic } from '@/types';
 import * as echarts from 'echarts';
 
-interface IProps {}
+interface IProps {
+  data: AlarmStatic[];
+}
 
 const colorArr = ['#8DFFD9', '#8DDBFF', '#CB8DFF', '#D31AFC', '#FFE58D'];
 
-const PieChart: React.FC<IProps> = () => {
+const PieChart: React.FC<IProps> = ({ data }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [charts, setCharts] = useState<echarts.ECharts>();
   useEffect(() => {
@@ -13,6 +22,10 @@ const PieChart: React.FC<IProps> = () => {
       const myChart = echarts.init(ref.current);
       setCharts(myChart);
     }
+  }, []);
+
+  const getColor = useCallback((index: number) => {
+    return colorArr[index % (colorArr.length - 1)];
   }, []);
 
   const options: echarts.EChartsOption = useMemo(
@@ -40,7 +53,6 @@ const PieChart: React.FC<IProps> = () => {
           avoidLabelOverlap: false,
           itemStyle: {
             borderRadius: 0,
-            borderColor: '#091946',
             borderWidth: 2,
             shadowBlur: 5,
           },
@@ -51,17 +63,18 @@ const PieChart: React.FC<IProps> = () => {
           labelLine: {
             show: false,
           },
-          data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' },
-          ],
+          data: data.map((item, index) => ({
+            value: item.countStatistic,
+            name: item.infoSecurityName,
+            itemStyle: {
+              color: getColor(index),
+              shadowColor: getColor(index),
+            },
+          })),
         },
       ],
     }),
-    [],
+    [data],
   );
 
   useEffect(() => {

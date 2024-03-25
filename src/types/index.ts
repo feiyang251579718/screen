@@ -14,10 +14,10 @@ export interface TeamDetail {
 
 export interface AlarmStatic {
   exerciseId: number;
-  infoSecurity: string;
-  infoSecurityName: string;
-  countStatistic: number;
-  statisticRate: number;
+  infoSecurity: string; //事件大类
+  infoSecurityName: string; //事件大类名称
+  countStatistic: number; //事件大类统计量
+  statisticRate: number; //事件大类占比
 }
 
 export interface BasicInformation {

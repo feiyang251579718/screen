@@ -1,4 +1,5 @@
-import { ws_prefix } from '@/utils/';
+import { ws_prefix } from '@/utils';
+import { bus } from './bus';
 
 let conn: WebSocket | undefined = undefined;
 
@@ -13,6 +14,12 @@ const init = (token: string, exerciseId: string) => {
     // socket.send('Hello Server!');
     console.log('connect');
   });
+
+  setInterval(() => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send('keep');
+    }
+  }, 30000);
 
   // Listen for messages
   socket.addEventListener('message', function (event) {

@@ -1,8 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import cls from 'classnames';
+import { RequestUrl } from '@/utils';
+import { AlarmStatic } from '@/types';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
 import PieChart from './PieChart';
+import { useRequest } from '@/hooks';
 
 import style from './style.less';
 
@@ -16,60 +19,55 @@ const classList = [
 ];
 
 const PieCard: React.FC<IProps> = () => {
-  const data = [
-    {
-      title: 'ITO设备漏洞利用攻击',
-      percent: 25,
-    },
-    {
-      title: '系统命令注入',
-      percent: 25,
-    },
-    {
-      title: 'Web组件信息泄露',
-      percent: 75,
-    },
-    {
-      title: '系统命令注入',
-      percent: 25,
-    },
-  ];
+  const { get } = useRequest();
+  const [data, setData] = useState<AlarmStatic[]>([]);
 
-  const pieData = useMemo(
-    () => [
-      {
-        type: '分类一',
-        value: 27,
-      },
-      {
-        type: '分类二',
-        value: 25,
-      },
-      {
-        type: '分类三',
-        value: 18,
-      },
-      {
-        type: '分类四',
-        value: 15,
-      },
-      {
-        type: '分类五',
-        value: 10,
-      },
-      {
-        type: '其它',
-        value: 5,
-      },
-    ],
-    [],
-  );
+  const queryData = useCallback(() => {
+    get<AlarmStatic[]>(RequestUrl.alarmDetail).then((res) => {
+      // setData(res.data)
+      setData([
+        {
+          infoSecurityName: 'ITO设备漏洞利用攻击',
+          infoSecurity: '',
+          exerciseId: 1,
+          countStatistic: 10,
+          statisticRate: 25,
+        },
+        {
+          infoSecurityName: '系统命令注入',
+          infoSecurity: '',
+          exerciseId: 1,
+          countStatistic: 10,
+          statisticRate: 25,
+        },
+        {
+          infoSecurityName: 'Web组件信息泄露',
+          infoSecurity: '',
+          exerciseId: 1,
+          countStatistic: 14,
+          statisticRate: 75,
+        },
+        {
+          infoSecurityName: '系统命令注入',
+          infoSecurity: '',
+          exerciseId: 1,
+          countStatistic: 15,
+          statisticRate: 25,
+        },
+      ]);
+    });
+  }, []);
+
+  useEffect(() => {
+    queryData();
+  }, []);
+
   const hasData = false;
   return (
     <Panel title="威胁分析" collapse={false} size="medium">
       <div className={style.pieCard}>
         <div className={style.pieContent}>
-          <PieChart data={pieData} />
+          <PieChart data={data} />
         </div>
         <div className={style.dataContent}>
           {hasData ? (
@@ -79,12 +77,14 @@ const PieCard: React.FC<IProps> = () => {
               {data.map((item, index) => (
                 <div className={style.listItem} key={index}>
                   <div className={style.listItemTitle}>
-                    <div className={style.title}>{item.title}</div>
-                    <div className={style.percent}>{`${item.percent}%`}</div>
+                    <div className={style.title}>{item.infoSecurityName}</div>
+                    <div
+                      className={style.percent}
+                    >{`${item.statisticRate}%`}</div>
                   </div>
                   <div
                     className={cls(style.itemProgress, classList[index % 4])}
-                    style={{ width: `${item.percent}%` }}
+                    style={{ width: `${item.statisticRate}%` }}
                   />
                 </div>
               ))}
