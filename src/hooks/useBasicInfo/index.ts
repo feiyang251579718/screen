@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BasicInformation } from '@/types';
 import useRequest from '../useRequest';
-import { RequestUrl } from '@/utils';
+import { RequestUrl, bus } from '@/utils';
 import { useContext } from 'react';
 import { ConfigContext } from './BasicInfoProvider';
 
@@ -17,9 +17,18 @@ export const useQueryBasicInfo = () => {
       (response) => {
         const result = response.data;
         setData(result);
+        bus.emit('update:basicInfo', result);
         return result;
       },
     );
+  }, []);
+  useEffect(() => {
+    bus.addListener('ws:refresh:resource', () => {
+      refetch();
+    });
+    return () => {
+      bus.removeListener('ws:refresh:resource');
+    };
   }, []);
   return {
     data,

@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import Panel from '../Panel';
-import { RequestUrl } from '@/utils';
+import { RequestUrl, bus } from '@/utils';
 import { useRequest, useBasicInfo } from '@/hooks';
 
 import style from './style.less';
@@ -44,9 +44,14 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
       setListData(res.data || []);
     });
   }, []);
-
   useEffect(() => {
     queryData();
+    bus.addListener('ws:refresh:rank', () => {
+      queryData();
+    });
+    return () => {
+      bus.removeListener('ws:refresh:rank');
+    };
   }, []);
 
   const columns = useMemo(() => {

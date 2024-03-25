@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import cls from 'classnames';
-import { RequestUrl } from '@/utils';
+import { RequestUrl, bus } from '@/utils';
 import { AlarmStatic } from '@/types';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
@@ -60,6 +60,12 @@ const PieCard: React.FC<IProps> = () => {
 
   useEffect(() => {
     queryData();
+    bus.addListener('ws:refresh:rank', (data: any) => {
+      setData(data);
+    });
+    return () => {
+      bus.removeListener('ws:refresh:rank');
+    };
   }, []);
 
   const hasData = false;

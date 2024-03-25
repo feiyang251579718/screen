@@ -1,33 +1,31 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import VirtualList, { ListRef } from 'rc-virtual-list';
 import { Tooltip } from 'antd';
 import { useSize } from 'ahooks';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
 import { WarnMessage } from '@/types';
-import { RequestUrl, parseTime } from '@/utils';
-import { useRequest } from '@/hooks';
+import { bus } from '@/utils';
 
 import style from './style.less';
 interface IProps {}
 
 const WarnList: React.FC<IProps> = () => {
-  const { get } = useRequest();
-  const [warnList, setWarnList] = useState<WarnMessage[]>(
-    new Array(1000).fill(1).map((item, index) => ({
-      time: parseTime(new Date().getTime(), 'HH:mm'),
-      infosecurityName: 'SSH账号暴力破解试点范围VS的服务费',
-      isBeAttackTargetName: '红色诺基亚手机',
-      teamName: `${index}`,
-      content: `DMZ-Web2004-${index}`,
-    })),
-  );
-  const queryData = useCallback(() => {
-    get<WarnMessage[]>(RequestUrl.alarmDetail);
-  }, []);
+  const [warnList, setWarnList] = useState<WarnMessage[]>([]);
+  const queryData = useCallback(() => {}, []);
   const listRef = useRef<HTMLDivElement>(null);
   const size = useSize(listRef);
   const vListRef = useRef<ListRef>(null);
+
+  useEffect(() => {
+    queryData();
+    bus.addListener('ws:refresh:rank', () => {
+      queryData();
+    });
+    return () => {
+      bus.removeListener('ws:refresh:rank');
+    };
+  }, []);
   return (
     <Panel title="安全告警" size="large" collapse={false}>
       <div className={style.warnList} ref={listRef}>
