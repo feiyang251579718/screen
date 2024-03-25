@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import sha256 from 'crypto-js/sha256';
 import { ResponseData } from '@/types';
-import { prefix } from '@/utils/';
+import { prefix, genHeaders } from '@/utils';
 import useConnectConfig from './useConnectConfig';
 import qs from 'qs';
 import { omit } from 'lodash';
@@ -21,29 +21,18 @@ const buildStr = (obj: { [key: string]: any }) => {
   return resultStr;
 };
 
-const generateSixDigitRandomNumberWithLeadingZeros = () => {
-  let randomNumber = Math.floor(Math.random() * 1000000);
-  return ('000000' + randomNumber).slice(-6); // 在前面补足零然后截取最后六位
-};
-
 const useRequest = () => {
   const config = useConnectConfig();
   const get = useCallback(function <T>(
     url: string,
     params?: { [key: string]: string },
   ) {
-    const headers = {
-      ...omit(config, 'exerciseId'),
-      timestamp: `${Date.now()}`,
-      nonce: generateSixDigitRandomNumberWithLeadingZeros(),
-    };
-    const bundleStr = buildStr({
-      ...headers,
+    const { signature, headers } = genHeaders({
+      ...config,
       ...params,
       exerciseId: config.exerciseId,
       uri: `/college/competition${url}`,
     });
-    const signature = encode(bundleStr);
     return fetch(
       `${prefix}${url}?${qs.stringify({
         ...params,

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 export default () => {
   const Authorization =
-    'Bearer eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6IjFmNTY0Nzk5LTcwYmUtNDcxNS04Mjg2LWEwM2MwY2QxNzcwMCJ9.5y482FiVCAxX9yCepJTK44Wh_UzM8OnNlDs8j1T6zCIyF26AfiOrcFvRI-EXApsCOQTDagmSfqVH0jOg_ELlMA';
+    'Bearer eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6Ijg0MjE0Mjk2LTUwMzgtNDNkOC1hNWY1LTQ2MzVkZjM0YWUzMCJ9.RPa8rqEpULBqSEi_MURegS7FOVVVjpFQaWjAcmVv3IGOv5wV4s0-HvMRWv__R4Bcd5QNI8Jvq-Ln9YSyUBn1sw';
   return useMemo(
     () => ({
       exerciseId: '10000153',

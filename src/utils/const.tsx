@@ -1,6 +1,6 @@
 export const RequestUrl = {
   // 队伍排名
-  attackerRanks: '/targetRangeBigScreen/attackerRank',
+  attackerRanks: '/targetRangeBigScreen/attackerRanks',
   defenderRanks: '/targetRangeBigScreen/defenderRanks',
   // 单个队伍信息
   defenderInfo: '/targetRangeBigScreen/defenderRank',
