@@ -82,5 +82,5 @@ export const start = () => {
     queryResult().then((data: any) => {
       bus.emit('ws:refresh:report', data.data);
     });
-  }, 30000);
+  }, 10000);
 };
