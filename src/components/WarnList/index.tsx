@@ -24,6 +24,15 @@ const WarnList: React.FC<IProps> = () => {
       bus.removeListener('ws:refresh:warn');
     };
   }, []);
+
+  useEffect(() => {
+    if (vListRef.current) {
+      vListRef.current.scrollTo({
+        index: warnList.length - 1,
+      });
+    }
+  }, [warnList]);
+
   return (
     <Panel title="安全告警" size="large" collapse={false}>
       <div className={style.warnList} ref={listRef}>

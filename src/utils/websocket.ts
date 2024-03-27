@@ -1,5 +1,6 @@
 import { ws_prefix } from '@/utils';
 import { bus } from './bus';
+import { start } from './mock';
 
 let conn: WebSocket | undefined = undefined;
 
@@ -55,6 +56,7 @@ const init = (token: string, exerciseId: string) => {
     }
   });
   conn = socket;
+  start();
 };
 
 const connect = (token: string, exerciseId: string) => {

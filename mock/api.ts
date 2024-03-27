@@ -48,4 +48,13 @@ export default {
       'statisticRate|1-20': 1,
     },
   }),
+  'GET /api/alarmList': mockjs.mock({
+    data: {
+      isBeAttackTargetName: '@csentence(3, 5)',
+      infosecurityName: '@csentence(3, 5)',
+      time: '@time("HH:mm")',
+      teamName: '@cname',
+      content: '@cparagraph(1, 5)',
+    },
+  }),
 };
