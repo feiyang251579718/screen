@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "umi dev",
+    "start": "node scripts/start",
     "build": "umi build",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
@@ -35,7 +35,9 @@
     "mockjs": "^1.1.0",
     "react": "17.x",
     "react-dom": "17.x",
-    "umi": "^3.5.41"
+    "shelljs": "^0.8.5",
+    "umi": "^3.5.41",
+    "yargs-parser": "^21.1.1"
   },
   "devDependencies": {
     "@umijs/preset-react": "1.x",
