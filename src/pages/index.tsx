@@ -32,6 +32,7 @@ const Index: React.FC<IProps> = () => {
     <div className={style.bg}>
       <Header />
       <div className={style.content}>
+        <div id="MapCancas"></div>
         {battleStatus !== BattleStatus.End && (
           <div className={style.left}>
             <TeamInfo />
@@ -45,7 +46,6 @@ const Index: React.FC<IProps> = () => {
               <BattleInfo />
             </div>
           )}
-          <div></div>
         </div>
         {battleStatus !== BattleStatus.End && (
           <div className={style.right}>
