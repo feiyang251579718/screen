@@ -38,7 +38,7 @@ const init = (token: string, exerciseId: string) => {
     const data: WebSocketData = event.data;
     switch (data.code) {
       case WebSocketCode.WarnList:
-        bus.emit('warnList', data.data);
+        bus.emit('ws:refresh:warn', data.data);
         break;
       case WebSocketCode.AttackType:
         bus.emit('ws:refresh:pie', data.data);
@@ -47,7 +47,7 @@ const init = (token: string, exerciseId: string) => {
         bus.emit('ws:refresh:rank', data.data);
         break;
       case WebSocketCode.ReportResult:
-        bus.emit('reportResult', data.data);
+        bus.emit('ws:refresh:report', data.data);
         break;
       case WebSocketCode.ResouceRefresh:
         bus.emit('ws:refresh:resource', data.data);

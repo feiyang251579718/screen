@@ -12,18 +12,16 @@ interface IProps {}
 
 const WarnList: React.FC<IProps> = () => {
   const [warnList, setWarnList] = useState<WarnMessage[]>([]);
-  const queryData = useCallback(() => {}, []);
   const listRef = useRef<HTMLDivElement>(null);
   const size = useSize(listRef);
   const vListRef = useRef<ListRef>(null);
 
   useEffect(() => {
-    queryData();
-    bus.addListener('ws:refresh:rank', () => {
-      queryData();
+    bus.addListener('ws:refresh:warn', (data: WarnMessage) => {
+      setWarnList((list) => [...list, data]);
     });
     return () => {
-      bus.removeListener('ws:refresh:rank');
+      bus.removeListener('ws:refresh:warn');
     };
   }, []);
   return (
