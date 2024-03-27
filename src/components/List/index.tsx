@@ -120,7 +120,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
         {listData.map((item, index) => {
           return (
             <div className={style.renderItem} key={index}>
-              {columns.map((column, index) => {
+              {columns.map((column, columnindex) => {
                 return (
                   <div
                     className={style.itemCell}
@@ -132,7 +132,7 @@ const List: React.FC<IProps> = ({ title, type, collapse }) => {
                           }
                         : undefined
                     }
-                    key={index}
+                    key={`${index}-${columnindex}`}
                   >
                     {column.render(item)}
                   </div>

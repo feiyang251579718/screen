@@ -22,4 +22,4 @@ echarts.use([
   CanvasRenderer,
 ]);
 
-window.g_bus = bus;
+console.log('init');

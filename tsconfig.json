@@ -22,7 +22,8 @@
     "config/**/*",
     ".umirc.ts",
     "typings.d.ts",
-    "scripts"
+    "scripts",
+    "public/js/demo.js"
   ],
   "exclude": [
     "node_modules",

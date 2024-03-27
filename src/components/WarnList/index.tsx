@@ -41,7 +41,7 @@ const WarnList: React.FC<IProps> = () => {
             className={style.list}
             data={warnList}
             height={size?.height || 210}
-            itemKey="key"
+            itemKey="id"
             ref={vListRef}
             fullHeight={true}
             itemHeight={28}

@@ -35,3 +35,4 @@ export class Bus {
   }
 }
 export const bus = new Bus();
+window.g_bus = bus;

@@ -16,7 +16,6 @@ const WarnList: React.FC<IProps> = () => {
   const vListRef = useRef<ListRef>(null);
   useEffect(() => {
     bus.addListener('ws:refresh:report', (data: AttackInfo) => {
-      console.log('data :>> ', data);
       setWarnList((list) => [...list, data]);
     });
     return () => {
