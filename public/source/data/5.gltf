@@ -1,0 +1,41 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "Sketchup glTF Exporter by Evan Prananta."
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "samplers": [
+    {
+    }
+  ],
+  "nodes": [
+    {
+      "name": "root"
+    }
+  ],
+  "materials": [
+
+  ],
+  "meshes": [
+
+  ],
+  "accessors": [
+
+  ],
+  "bufferViews": [
+
+  ],
+  "buffers": [
+    {
+      "uri": "data:application/octet-stream;base64,",
+      "byteLength": 0
+    }
+  ]
+}
