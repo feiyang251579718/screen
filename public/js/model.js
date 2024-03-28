@@ -1,29 +1,15 @@
 let basePath = './source/';
 let envMap;
-let aroundNumber = 6;
-let aroundRadius = 30;
+let aroundNumber = 9;
+let aroundRadius = 50;
 
 let map = new EM.Map('MapCancas', {
-  zoom: 21.5,
+  zoom: 20.29,
+  minZoom: 19,
   center: [0, 0, 0],
   pitch: 60,
   bgColor: 'rgb(25, 25, 25)',
-  // bgColor: "rgb(255, 255, 255)",
 });
-map.renderer.toneMapping = THREE.LinearToneMapping;
-map.renderer.toneMappingExposure = 2;
-
-// map.setLightIntensity(2);
-
-//定义周边环绕，因为模型比例不一致，这里微调下
-let aroundArr = [
-  { model: 'data/16.gltf', rotate: [90, 0, 0], scale: [1, 1, 1] },
-  { model: 'data/14.gltf', rotate: [90, 0, 0], scale: [0.4, 0.4, 0.4] },
-  { model: 'data/7.gltf', rotate: [90, 0, 0], scale: [1, 1, 1] },
-  { model: 'data/8.gltf', rotate: [90, 0, 0], scale: [1, 1, 1] },
-  { model: 'data/11.gltf', rotate: [90, 0, 0], scale: [1, 1, 1] },
-  { model: 'data/15.gltf', rotate: [90, 0, 0], scale: [10, 10, 10] },
-];
 
 let promise = initEnvMap();
 promise.then(() => {
@@ -33,31 +19,96 @@ promise.then(() => {
 
 //添加全部周边
 function addAround() {
+  //定义周边环绕，因为模型比例不一致，这里微调下
+  let aroundArr = [
+    { model: 'data/1.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/2.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/3.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/4.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/5.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/6.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/7.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/8.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+    { model: 'data/9.glb', rotate: [90, 0, 0], scale: [1, 1, 1] },
+  ];
   for (let i = 0; i < aroundNumber; i++) {
     let angle = (i * Math.PI * 2) / aroundNumber;
     let baseX = Math.cos(angle) * aroundRadius,
       baseY = Math.sin(angle) * aroundRadius,
       baseZ = 0;
-    addOneAround([baseX, baseY, baseZ], i);
+    addOneAround([baseX, baseY, baseZ], aroundArr[i]);
   }
 }
 
 //添加一个周边
-function addOneAround(posArr, index) {
-  let info = aroundArr[index];
-  if (!info) return;
+function addOneAround(posArr, info) {
   //模方底部
-  let bottom = new EM.model.Model({
+  let around = new EM.model.Model({
     url: basePath + info.model,
     coordinate: [posArr[0], posArr[1], posArr[2]],
     rotate: info.rotate,
     scale: info.scale,
   });
-  map.addModel(bottom);
+  map.addModel(around);
+
+  around.on('loaded', function () {
+    setModelEnvMap(around); //设置物理材质环境光
+  });
+
+  addLink(posArr);
 }
 
 //添加周边与主模仿的链接
-function addLink(posArr, index) {}
+function addLink(posArr) {
+  let linkRaidus = 10;
+  let linkPoints = [
+    [-linkRaidus, linkRaidus, 0],
+    [linkRaidus, linkRaidus, 0],
+    [linkRaidus, -linkRaidus, 0],
+    [-linkRaidus, -linkRaidus, 0],
+  ];
+  let dist = Infinity,
+    index;
+  for (let i = 0; i < linkPoints.length; i++) {
+    let point = linkPoints[i],
+      length = Math.hypot(
+        posArr[0] - point[0],
+        posArr[1] - point[1],
+        posArr[2] - point[2],
+      );
+    if (length < dist) {
+      dist = length;
+      index = i;
+    }
+  }
+  if (index != null && index != undefined) {
+    let linkPoint = linkPoints[index];
+    let absX = Math.abs(posArr[0]),
+      absY = Math.abs(posArr[1]);
+    let midPoint;
+    if (absX >= absY) {
+      midPoint = [posArr[0], linkPoint[1], 0];
+    } else {
+      midPoint = [linkPoint[0], posArr[1], 0];
+    }
+    let solidCoords = [Array.from(posArr), midPoint, Array.from(linkPoint)];
+    solidCoords.map((item) => {
+      item[2] = -2;
+    });
+    let track = new EM.line.Track({
+      coordinates: solidCoords,
+      width: 10,
+      iconUrl: basePath + 'images/red_line.png',
+      iconLength: 80,
+      iconSpace: 30,
+      useAlpha: true,
+      isAnimate: true,
+      depthTest: true,
+      speed: 2.5 + Math.random(),
+    });
+    map.addLine(track);
+  }
+}
 
 //测试接口，攻击
 function attack() {
@@ -81,10 +132,10 @@ function addMain() {
 
   //模方底部
   let bottom = new EM.model.Model({
-    url: basePath + 'data/4.gltf',
-    coordinate: [0, 0, 0],
+    url: basePath + 'data/bottom.glb',
+    coordinate: [0, 0, -5],
     rotate: [90, 0, 0],
-    scale: [15, 15, 15],
+    scale: [1, 0.5, 1],
   });
   map.addModel(bottom);
 
@@ -93,30 +144,30 @@ function addMain() {
   });
 
   //模仿顶部
-  let top = new EM.model.Model({
-    url: basePath + 'data/19.gltf',
-    coordinate: [0, 0, 7],
+  let cube = new EM.model.Model({
+    url: basePath + 'data/cube2.glb',
+    coordinate: [0, 0, 10],
     rotate: [90, 0, 0],
-    scale: [1, 1, 1],
+    scale: [4, 4, 4],
   });
-  map.addModel(top);
+  map.addModel(cube);
 
-  top.on('loaded', function () {
-    setModelEnvMap(top);
+  cube.on('loaded', function () {
+    setModelEnvMap(cube);
   });
 
   let modelUp = true;
   map.on('beforeRender', function () {
-    if (top.model) {
-      top.model.rotation.y += (Math.PI * 2) / 180; //度
+    if (cube.model) {
+      cube.model.rotation.y += (Math.PI * 2) / 180; //度
       if (modelUp) {
-        top.model.position.z += 0.02;
-        if (top.model.position.z > 10) {
+        cube.model.position.z += 0.1;
+        if (cube.model.position.z > 15) {
           modelUp = false;
         }
       } else {
-        top.model.position.z -= 0.02;
-        if (top.model.position.z < 7) {
+        cube.model.position.z -= 0.1;
+        if (cube.model.position.z < 5) {
           modelUp = true;
         }
       }
@@ -144,7 +195,7 @@ function setModelEnvMap(model) {
   object.traverse((mesh) => {
     if (mesh.material && mesh.material instanceof THREE.MeshStandardMaterial) {
       mesh.material.envMap = envMap;
-      mesh.material.envMapIntensity = 2;
+      mesh.material.envMapIntensity = 1;
     }
   });
 }
