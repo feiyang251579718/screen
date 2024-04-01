@@ -25,36 +25,38 @@ const PieCard: React.FC<IProps> = () => {
   const queryData = useCallback(() => {
     get<AlarmStatic[]>(RequestUrl.alarmDetail).then((res) => {
       // setData(res.data)
-      setData([
-        {
-          infoSecurityName: 'ITO设备漏洞利用攻击',
-          infoSecurity: '',
-          exerciseId: 1,
-          countStatistic: 10,
-          statisticRate: 25,
-        },
-        {
-          infoSecurityName: '系统命令注入',
-          infoSecurity: '',
-          exerciseId: 1,
-          countStatistic: 10,
-          statisticRate: 25,
-        },
-        {
-          infoSecurityName: 'Web组件信息泄露',
-          infoSecurity: '',
-          exerciseId: 1,
-          countStatistic: 14,
-          statisticRate: 75,
-        },
-        {
-          infoSecurityName: '系统命令注入',
-          infoSecurity: '',
-          exerciseId: 1,
-          countStatistic: 15,
-          statisticRate: 25,
-        },
-      ]);
+      setTimeout(() => {
+        setData([
+          {
+            infoSecurityName: 'ITO设备漏洞利用攻击',
+            infoSecurity: '',
+            exerciseId: 1,
+            countStatistic: 10,
+            statisticRate: 25,
+          },
+          {
+            infoSecurityName: '系统命令注入',
+            infoSecurity: '',
+            exerciseId: 1,
+            countStatistic: 10,
+            statisticRate: 25,
+          },
+          {
+            infoSecurityName: 'Web组件信息泄露',
+            infoSecurity: '',
+            exerciseId: 1,
+            countStatistic: 14,
+            statisticRate: 75,
+          },
+          {
+            infoSecurityName: '系统命令注入',
+            infoSecurity: '',
+            exerciseId: 1,
+            countStatistic: 15,
+            statisticRate: 25,
+          },
+        ]);
+      }, 1000);
     });
   }, []);
 
@@ -68,7 +70,7 @@ const PieCard: React.FC<IProps> = () => {
     };
   }, []);
 
-  const hasData = false;
+  const emptyData = useMemo(() => !data.length, [data]);
   return (
     <Panel title="威胁分析" collapse={false} size="medium">
       <div className={style.pieCard}>
@@ -76,7 +78,7 @@ const PieCard: React.FC<IProps> = () => {
           <PieChart data={data} />
         </div>
         <div className={style.dataContent}>
-          {hasData ? (
+          {emptyData ? (
             <EmptyData />
           ) : (
             <div className={style.list}>

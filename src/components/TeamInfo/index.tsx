@@ -1,13 +1,14 @@
 import React from 'react';
 import { useBasicInfo } from '@/hooks';
+import cls from 'classnames';
 import style from './style.less';
 
 interface IProps {}
 
 const TeamInfo: React.FC<IProps> = () => {
-  const { basicData: data } = useBasicInfo();
+  const { basicData: data, collapse } = useBasicInfo();
   return (
-    <div className={style.teamInfo}>
+    <div className={cls(style.teamInfo, collapse ? 'collapsed' : '')}>
       <div className={style.teamDivider} />
       <div className={style.container}>
         <div className={style.team}>

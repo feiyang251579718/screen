@@ -13,7 +13,8 @@ export const RequestUrl = {
   targetCount: '/targetRangeBigScreen/getTargetAndAttackAndDefenseCount',
 };
 
-export const host = 'api';
-// 'https://uat-university-api.sangfor.com/college/competition';
+// export const host = 'api';
+export const host =
+  'https://uat-university-api.sangfor.com/college/competition';
 export const prefix = host;
 export const ws_prefix = `wss://uat-university-api.sangfor.com/college/socket`;

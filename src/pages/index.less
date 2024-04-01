@@ -44,19 +44,28 @@
     }
   }
 
+  .left {
+    :global {
+      .collapsed {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+    }
+  }
+
+  .middle,
+  .right {
+    :global {
+      .collapsed {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+  }
+
   .middle {
     flex: 1 1 0;
     position: relative;
     z-index: 10;
-
-    .battleContent {
-      position: absolute;
-      right: 14px;
-      display: flex;
-
-      > div + div {
-        margin-left: 15px;
-      }
-    }
   }
 }

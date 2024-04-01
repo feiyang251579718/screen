@@ -1,11 +1,22 @@
 @import url('~@/theme.less');
 
+:global {
+  .show {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+  }
+}
+
 .result {
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 50;
   height: 255px;
   background-size: 100% 100%;
+  transition: all 1s;
+  transform: translateY(100%);
+  opacity: 0;
 
   &.succesed {
     background-image: url('../../assets/img/result_victory.png');
