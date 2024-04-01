@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import cls from 'classnames';
 import style from './style.less';
+import { useBasicInfo } from '@/hooks';
 
 interface IProps {
   title: string;
@@ -10,6 +11,7 @@ interface IProps {
 
 const List: React.FC<IProps> = ({ title, collapse, size, children }) => {
   const hasCollapse = useMemo(() => typeof collapse === 'boolean', [collapse]);
+  const { collapse: globalCollapse, setCollapse } = useBasicInfo();
   const panelSize = useMemo(() => {
     switch (size) {
       case 'small':
@@ -22,10 +24,15 @@ const List: React.FC<IProps> = ({ title, collapse, size, children }) => {
         return style.panelSmall;
     }
   }, [size]);
+  const onCollapse = useCallback(() => {
+    setCollapse?.((coll) => !coll);
+  }, []);
   return (
-    <div className={cls(style.panel, panelSize)}>
+    <div
+      className={cls(style.panel, panelSize, globalCollapse ? 'collapsed' : '')}
+    >
       <div className={style.header}>
-        {hasCollapse && <div className={style.collapse} />}
+        {hasCollapse && <div className={style.collapse} onClick={onCollapse} />}
         <div className={style.title}>{title}</div>
         <div className={style.shadow} />
         {/* <div className={cls(style.shadowLight, style.shadow)} /> */}

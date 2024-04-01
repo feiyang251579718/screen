@@ -44,6 +44,24 @@
     }
   }
 
+  .left {
+    :global {
+      .collapsed {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+    }
+  }
+
+  .right {
+    :global {
+      .collapsed {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+  }
+
   .middle {
     flex: 1 1 0;
     position: relative;

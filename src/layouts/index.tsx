@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import BasicInfoProvider from '@/hooks/useBasicInfo/BasicInfoProvider';
 import { connectWS, disconnectWS } from '@/utils';
 import { useQueryBasicInfo, useConnectConfig } from '@/hooks';
@@ -10,6 +10,7 @@ interface IProps {
 const Main: React.FC<IProps> = ({ children }) => {
   const { data, refetch } = useQueryBasicInfo();
   const config = useConnectConfig();
+  const [collapse, setCollapse] = useState(false);
   useEffect(() => {
     connectWS(config.Authorization, config.exerciseId);
     return () => {
@@ -17,7 +18,12 @@ const Main: React.FC<IProps> = ({ children }) => {
     };
   }, []);
   return (
-    <BasicInfoProvider basicData={data} refetch={refetch}>
+    <BasicInfoProvider
+      basicData={data}
+      refetch={refetch}
+      setCollapse={setCollapse}
+      collapse={collapse}
+    >
       <div className="mainBody">{children}</div>
     </BasicInfoProvider>
   );
