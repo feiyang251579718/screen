@@ -1,107 +1,119 @@
 @import url('~@/theme.less');
 
 .teamInfo {
-    &:extend(.cardBorder);
-    width: @card-width;
-    height: 140px;
-    background: linear-gradient(180deg, rgba(8, 18, 57, 0.62) 0%, #162F77 100%);
-    backdrop-filter: blur(3px);
-    padding: 0 15px;
-    position: relative;
+  &:extend(.cardBorder);
+  width: @card-width;
+  height: 140px;
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 1s;
+  background: linear-gradient(180deg, rgba(8, 18, 57, 0.62) 0%, #162f77 100%);
+  backdrop-filter: blur(3px);
+  padding: 0 15px;
+  position: relative;
 
-    .teamDivider {
-        position: absolute;
-        width: calc(100% - 30px);
-        top: 50px;
-        left: 15px;
-        border-top: 1px solid;
-        border-image: linear-gradient(90deg, rgba(109, 135, 255, 1), rgba(156, 226, 255, 1), rgba(99, 126, 255, 1)) 1 1;
+  .teamDivider {
+    position: absolute;
+    width: calc(100% - 30px);
+    top: 50px;
+    left: 15px;
+    border-top: 1px solid;
+    border-image: linear-gradient(
+        90deg,
+        rgba(109, 135, 255, 1),
+        rgba(156, 226, 255, 1),
+        rgba(99, 126, 255, 1)
+      )
+      1 1;
 
-
-        &::after,
-        &::before {
-            content: "";
-            position: absolute;
-            top: -4px;
-            width: 8px;
-            height: 8px;
-            transform: rotate(45deg);
-            background: linear-gradient(135deg, #FFBEBE 0%, #FF5336 100%);
-        }
-
-        &::before {
-            left: -4px;
-        }
-
-        &::after {
-            right: -4px;
-        }
+    &::after,
+    &::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      width: 8px;
+      height: 8px;
+      transform: rotate(45deg);
+      background: linear-gradient(135deg, #ffbebe 0%, #ff5336 100%);
     }
 
-    .container {
+    &::before {
+      left: -4px;
+    }
+
+    &::after {
+      right: -4px;
+    }
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+
+    .team {
+      flex: 1 1 auto;
+
+      .teamTitle {
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 600;
+        font-size: 20px;
+        color: #ffffff;
+        text-align: center;
+        line-height: 1.4;
+        font-style: normal;
+        padding: 12px;
+      }
+
+      .teamContent {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        padding: 10px 0;
 
-        .team {
-            flex: 1 1 auto;
+        .teamItem {
+          flex: 1 1 auto;
+          text-align: center;
 
-            .teamTitle {
-                font-family: PingFangSC, PingFang SC;
-                font-weight: 600;
-                font-size: 20px;
-                color: #FFFFFF;
-                text-align: center;
-                line-height: 1.4;
-                font-style: normal;
-                padding: 12px;
+          & + .teamItem {
+            position: relative;
+
+            &:after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 1px;
+              height: 53px;
+              border: 1px solid;
+              border-image: linear-gradient(
+                  180deg,
+                  rgba(109, 135, 255, 1),
+                  rgba(156, 226, 255, 1),
+                  rgba(99, 126, 255, 1)
+                )
+                1 1;
             }
+          }
 
-            .teamContent {
-                display: flex;
-                justify-content: center;
-                padding: 10px 0;
+          .num {
+            font-family: SourceHanSansCN, SourceHanSansCN;
+            font-weight: bold;
+            font-size: 28px;
+            color: #ffffff;
+            line-height: 1;
+            padding-bottom: 8px;
+            font-style: normal;
+          }
 
-                .teamItem {
-                    flex: 1 1 auto;
-                    text-align: center;
-
-                    &+.teamItem {
-                        position: relative;
-
-                        &:after {
-                            content: "";
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 1px;
-                            height: 53px;
-                            border: 1px solid;
-                            border-image: linear-gradient(180deg, rgba(109, 135, 255, 1), rgba(156, 226, 255, 1), rgba(99, 126, 255, 1)) 1 1;
-                        }
-                    }
-
-                    .num {
-                        font-family: SourceHanSansCN, SourceHanSansCN;
-                        font-weight: bold;
-                        font-size: 28px;
-                        color: #FFFFFF;
-                        line-height: 1;
-                        padding-bottom: 8px;
-                        font-style: normal;
-                    }
-
-                    .desc {
-                        font-family: PingFangSC, PingFang SC;
-                        font-weight: 400;
-                        font-size: 14px;
-                        color: #7EC4FD;
-                        line-height: 1.2;
-                        font-style: normal;
-                    }
-                }
-
-            }
+          .desc {
+            font-family: PingFangSC, PingFang SC;
+            font-weight: 400;
+            font-size: 14px;
+            color: #7ec4fd;
+            line-height: 1.2;
+            font-style: normal;
+          }
         }
+      }
     }
-
+  }
 }

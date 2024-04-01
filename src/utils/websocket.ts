@@ -56,7 +56,7 @@ const init = (token: string, exerciseId: string) => {
     }
   });
   conn = socket;
-  // start();
+  start();
 };
 
 const connect = (token: string, exerciseId: string) => {

@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { TargetCount } from '@/types';
-import style from './style.less';
-import { useRequest } from '@/hooks';
+import cls from 'classnames';
+import { useRequest, useBasicInfo } from '@/hooks';
 import { RequestUrl } from '@/utils';
+import style from './style.less';
 
 interface IProps {}
 interface ItemIProps {
@@ -34,6 +35,7 @@ const BattleItem: React.FC<ItemIProps> = ({ type, count }) => {
 const BattleInfo: React.FC<IProps> = () => {
   const [battInfo, setBattleInfo] = useState<TargetCount>();
   const { get } = useRequest();
+  const { collapse: globalCollapse } = useBasicInfo();
   const queryData = useCallback(() => {
     get<TargetCount>(RequestUrl.targetCount).then((data) => {
       setBattleInfo(data.data);
@@ -43,11 +45,13 @@ const BattleInfo: React.FC<IProps> = () => {
     queryData();
   }, []);
   return (
-    <>
+    <div
+      className={cls(style.battleContent, globalCollapse ? 'collapsed' : '')}
+    >
       <BattleItem type="resource" count={battInfo?.targetHostCount || 0} />
       <BattleItem type="attack" count={battInfo?.attackReportCount || 0} />
       <BattleItem type="defense" count={battInfo?.defenseReportCount || 0} />
-    </>
+    </div>
   );
 };
 
