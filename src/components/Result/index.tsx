@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import cls from 'classnames';
-import { TeamDetail } from '@/types';
-import { RequestUrl } from '@/utils';
-import { useRequest } from '@/hooks';
+import { TeamDetail, AttackInfo, SubTarget } from '@/types';
+import { RequestUrl, bus } from '@/utils';
+import { useRequest, useBasicInfo } from '@/hooks';
 import style from './style.less';
+import { useInterval } from 'ahooks';
 
 interface IProps {
   type: 'attacker' | 'defender';
@@ -11,43 +12,86 @@ interface IProps {
 
 const Result: React.FC<IProps> = ({ type }) => {
   const [teamInfo, setTeamInfo] = useState<TeamDetail>();
+  const [teamId, setTeamId] = useState<number>();
+  const [warnData, setWarnData] = useState<AttackInfo>();
+  const [index, setIndex] = useState<number>(0);
+  const [interval, setInterval] = useState<number | undefined>(5000);
   const { get } = useRequest();
+  const { collapse: globalCollapse, setCollapse } = useBasicInfo();
   const queryUrl = useMemo(
     () =>
-      type === 'attacker' ? RequestUrl.attackerInfo : RequestUrl.defenderInfo,
-    [type],
+      warnData?.roleType === 1
+        ? RequestUrl.attackerInfo
+        : RequestUrl.defenderInfo,
+    [warnData],
   );
 
-  const list = useMemo(() => {
-    return new Array(6).fill(3).map((item, index) => ({
-      name: index === 0 ? '靶标资产名称是的范德萨发' : '靶标资产名',
-    }));
+  useInterval(
+    () => {
+      const i = index + 1;
+      if (
+        warnData?.isMatchAreaTargets?.length &&
+        i < warnData?.isMatchAreaTargets?.length - 1
+      ) {
+        setIndex(i);
+      } else {
+        setInterval(undefined);
+        setCollapse?.(false);
+      }
+    },
+    interval,
+    { immediate: true },
+  );
+
+  const targets = useMemo(() => {
+    return warnData?.isMatchAreaTargets[index]?.subTargets || [];
+  }, [index, warnData]);
+
+  console.log('targets :>> ', targets);
+
+  useEffect(() => {
+    bus.addListener('ws:refresh:report', (data: AttackInfo) => {
+      console.log('report data :>> ', data);
+      setWarnData(data);
+      setTeamId(data.teamId);
+      setIndex(0);
+      setCollapse?.(true);
+    });
+    return () => {
+      bus.removeListener('ws:refresh:resource');
+    };
   }, []);
 
   const queryData = useCallback(() => {
-    get<TeamDetail>(queryUrl).then((res) => {
-      // setTeamInfo(res.data)
-      setTeamInfo({
-        teamName: '黑客帝国1队',
-        reportNum: 123,
-        score: 123,
-        rankNum: 1,
+    if (teamId) {
+      get<TeamDetail>(queryUrl, { teamId }).then((res) => {
+        setTeamInfo(res.data);
       });
-    });
+    }
   }, []);
 
   useEffect(() => {
     queryData();
   }, []);
 
+  console.log('warnData :>> ', warnData);
+
   const typeCls = useMemo(() => {
-    return type === 'defender' ? style.success : style.failed;
-  }, [type]);
+    return warnData?.roleType === 1 ? style.success : style.failed;
+  }, [warnData]);
 
   return (
-    <div className={cls(style.result, typeCls)}>
+    <div
+      className={cls(
+        style.result,
+        typeCls,
+        globalCollapse ? 'show' : 'collapsed',
+      )}
+    >
       <div className={style.team}>
-        <div className={style.teamTitle}>黑客帝国1队</div>
+        <div className={style.teamTitle}>
+          {teamInfo?.teamName || warnData?.teamName}
+        </div>
       </div>
       <div className={style.content}>
         <div className={style.left}>
@@ -82,10 +126,10 @@ const Result: React.FC<IProps> = ({ type }) => {
             </div>
           </div>
           <div className={style.list}>
-            {list.map((item) => (
-              <div className={style.item}>
+            {targets.map((item) => (
+              <div className={style.item} key={item.identifyByTimestamp}>
                 <div className={style.icon}></div>
-                <div className={style.name}>{item.name}</div>
+                <div className={style.name}>{item.assetName}</div>
               </div>
             ))}
           </div>

@@ -67,18 +67,18 @@ export interface WarnMessage {
   teamName: string;
   content: string;
 }
-
+export interface SubTarget {
+  assetName: string;
+  identifyByTimestamp: number;
+  targetId: number;
+  targetType: number;
+}
 export interface AreaTargets {
   id: number;
   isMatch: number;
   keyOnly: number;
   nodeId: string;
-  subTargets: {
-    assetName: string;
-    identifyByTimestamp: number;
-    targetId: number;
-    targetType: number;
-  }[];
+  subTargets: SubTarget[];
   targetId: number;
 }
 
