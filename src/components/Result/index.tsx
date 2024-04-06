@@ -17,7 +17,6 @@ const Result: React.FC<IProps> = ({ type }) => {
   const [teamId, setTeamId] = useState<number>();
   const [warnData, setWarnData] = useState<AttackInfo>();
   const [index, setIndex] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
   const [interval, setInterval] = useState<number | undefined>(15000);
   const { get } = useRequest();
   const { collapse: globalCollapse, setCollapse } = useBasicInfo();
@@ -34,26 +33,23 @@ const Result: React.FC<IProps> = ({ type }) => {
       const i = index + 1;
       const length = warnData?.isMatchAreaTargets?.length || 0;
       if (warnData?.isMatchAreaTargets?.length && i <= length - 1) {
-        // setIndex(i);
+        setIndex(i);
       } else if (index === length - 1) {
-        // setInterval(undefined);
-        // setCollapse?.(false);
+        setIndex(0);
+        setInterval(undefined);
+        setCollapse?.(false);
       }
     },
     interval,
     { immediate: true },
   );
 
+  console.log('index :>> ', index);
+
   const SubTargets = useMemo(
     () => warnData?.isMatchAreaTargets?.[index]?.subTargets || [],
     [index, warnData],
   );
-
-  // useInterval(() => {
-  //   setPage((p) => {
-  //     return page * 5 + 6 >= SubTargets.length ? 0 : p + 1;
-  //   });
-  // }, 5000);
 
   const tagetLists: SubTarget[][] = useMemo(() => {
     const pageSize = 6;
@@ -69,14 +65,13 @@ const Result: React.FC<IProps> = ({ type }) => {
       );
     }
     return tagetLists;
-  }, [SubTargets, page]);
+  }, [SubTargets]);
 
   useEffect(() => {
     bus.addListener('ws:refresh:report', (data: AttackInfo) => {
       setWarnData(data);
       setTeamId(data.teamId);
       setIndex(0);
-      setPage(0);
       setCollapse?.(true);
       setInterval(15000);
     });
