@@ -1,6 +1,5 @@
 import * as echarts from 'echarts/core';
 import { PieChart } from 'echarts/charts';
-import { bus } from '@/utils';
 import {
   TitleComponent,
   TooltipComponent,

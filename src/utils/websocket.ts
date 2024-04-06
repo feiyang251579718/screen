@@ -19,7 +19,7 @@ interface WebSocketData {
 
 const init = (token: string, exerciseId: string) => {
   const socket = new WebSocket(
-    `${ws_prefix}/targetRangeExercise/${token.split(/\s/)?.[1]}/${exerciseId}`,
+    `${ws_prefix}/targetRangeExercise/${token?.split(/\s/)?.[1]}/${exerciseId}`,
   );
 
   // Connection opened
