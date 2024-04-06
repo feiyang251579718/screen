@@ -3,6 +3,8 @@ import cls from 'classnames';
 import { TeamDetail, AttackInfo, SubTarget } from '@/types';
 import { RequestUrl, bus } from '@/utils';
 import { useRequest, useBasicInfo } from '@/hooks';
+import { slice } from 'lodash';
+import Swiper from './Swiper';
 import style from './style.less';
 import { useInterval } from 'ahooks';
 
@@ -15,7 +17,8 @@ const Result: React.FC<IProps> = ({ type }) => {
   const [teamId, setTeamId] = useState<number>();
   const [warnData, setWarnData] = useState<AttackInfo>();
   const [index, setIndex] = useState<number>(0);
-  const [interval, setInterval] = useState<number | undefined>(5000);
+  const [page, setPage] = useState<number>(0);
+  const [interval, setInterval] = useState<number | undefined>(15000);
   const { get } = useRequest();
   const { collapse: globalCollapse, setCollapse } = useBasicInfo();
   const queryUrl = useMemo(
@@ -29,33 +32,53 @@ const Result: React.FC<IProps> = ({ type }) => {
   useInterval(
     () => {
       const i = index + 1;
-      if (
-        warnData?.isMatchAreaTargets?.length &&
-        i < warnData?.isMatchAreaTargets?.length - 1
-      ) {
-        setIndex(i);
-      } else {
-        setInterval(undefined);
-        setCollapse?.(false);
+      const length = warnData?.isMatchAreaTargets?.length || 0;
+      if (warnData?.isMatchAreaTargets?.length && i <= length - 1) {
+        // setIndex(i);
+      } else if (index === length - 1) {
+        // setInterval(undefined);
+        // setCollapse?.(false);
       }
     },
     interval,
     { immediate: true },
   );
 
-  const targets = useMemo(() => {
-    return warnData?.isMatchAreaTargets[index]?.subTargets || [];
-  }, [index, warnData]);
+  const SubTargets = useMemo(
+    () => warnData?.isMatchAreaTargets?.[index]?.subTargets || [],
+    [index, warnData],
+  );
 
-  console.log('targets :>> ', targets);
+  // useInterval(() => {
+  //   setPage((p) => {
+  //     return page * 5 + 6 >= SubTargets.length ? 0 : p + 1;
+  //   });
+  // }, 5000);
+
+  const tagetLists: SubTarget[][] = useMemo(() => {
+    const pageSize = 6;
+    const pageNum = Math.abs(SubTargets.length / 6);
+    const tagetLists: SubTarget[][] = [];
+    for (let i = 0; i < pageNum; i++) {
+      tagetLists.push(
+        slice(
+          JSON.parse(JSON.stringify(SubTargets)),
+          i * pageSize,
+          i * (pageSize - 1) + pageSize,
+        ),
+      );
+    }
+    return tagetLists;
+  }, [SubTargets, page]);
 
   useEffect(() => {
     bus.addListener('ws:refresh:report', (data: AttackInfo) => {
-      console.log('report data :>> ', data);
       setWarnData(data);
       setTeamId(data.teamId);
       setIndex(0);
+      setPage(0);
       setCollapse?.(true);
+      setInterval(15000);
     });
     return () => {
       bus.removeListener('ws:refresh:resource');
@@ -72,9 +95,7 @@ const Result: React.FC<IProps> = ({ type }) => {
 
   useEffect(() => {
     queryData();
-  }, []);
-
-  console.log('warnData :>> ', warnData);
+  }, [teamId]);
 
   const typeCls = useMemo(() => {
     return warnData?.roleType === 1 ? style.success : style.failed;
@@ -126,12 +147,7 @@ const Result: React.FC<IProps> = ({ type }) => {
             </div>
           </div>
           <div className={style.list}>
-            {targets.map((item) => (
-              <div className={style.item} key={item.identifyByTimestamp}>
-                <div className={style.icon}></div>
-                <div className={style.name}>{item.assetName}</div>
-              </div>
-            ))}
+            <Swiper targets={tagetLists} />
           </div>
         </div>
       </div>

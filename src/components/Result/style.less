@@ -7,6 +7,31 @@
   }
 }
 
+@keyframes breath {
+  /* 动画开始时的不透明度 */
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  /* 动画50% 时的不透明度 */
+  50% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  /* 动画结束时的不透明度 */
+  100% {
+    opacity: 0;
+  }
+}
+
 .result {
   position: fixed;
   bottom: 0;
@@ -376,16 +401,45 @@
         width: 600px;
         height: 150px;
         background-size: 100% 100%;
-        display: flex;
-        padding: 14px 18px 8px;
-        align-items: center;
-        flex-wrap: wrap;
+        overflow: hidden;
+        padding: 4px 18px 8px;
+
+        :global {
+          .swiper {
+            margin-top: 6px;
+            height: 100%;
+            width: 520px;
+            margin-left: 10px;
+            margin-right: auto;
+          }
+
+          .swiper-slide {
+            height: 100%;
+
+            /* Center slide text vertically */
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+          }
+        }
+
+        // .listItem {
+        //   margin: 0 -6px;
+        // }
+
+        :global(.swiper-slide-active) {
+          .item {
+            visibility: visible;
+          }
+        }
 
         .item {
+          visibility: hidden;
+          display: inline-block;
           width: 160px;
           height: 56px;
           background-size: 100% 100%;
-          margin: 0px 20px 0 0;
+          margin: 6px 6px;
 
           .name {
             display: flex;

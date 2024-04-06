@@ -24,7 +24,9 @@ const Main: React.FC<IProps> = ({ children }) => {
       setCollapse={setCollapse}
       collapse={collapse}
     >
-      <div className="mainBody">{children}</div>
+      <div className="mainBody" style={{ height: '100%' }}>
+        {children}
+      </div>
     </BasicInfoProvider>
   );
 };

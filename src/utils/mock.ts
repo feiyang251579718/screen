@@ -24,18 +24,54 @@ const mockData = () => {
           keyOnly: 1709884455747,
           nodeId: 'node1709884456552',
           subTargets: [
-            // {
-            //   assetName: '服务器共享靶标007',
-            //   identifyByTimestamp: 1709884434731,
-            //   'targetId|1-2': 100,
-            //   targetType: 3001,
-            // },
-            // {
-            //   assetName: '服务器-专用-默认0041',
-            //   identifyByTimestamp: 1709885180537,
-            //   'targetId|1-2': 100,
-            //   targetType: 3001,
-            // },
+            {
+              assetName: '服务器共享靶标001',
+              identifyByTimestamp: 17098844343731,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
+            {
+              assetName: '服务器-专用-2',
+              identifyByTimestamp: 17098851280537,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
+            {
+              assetName: '服务器共享靶标003',
+              identifyByTimestamp: 17098844434731,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
+            {
+              assetName: '服务器-专用-默认004',
+              identifyByTimestamp: 17098856180537,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
+            {
+              assetName: '服务器共享靶标005',
+              identifyByTimestamp: 17098844333434731,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
+            {
+              assetName: '服务器-专用-默认006',
+              identifyByTimestamp: 17098851820537,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
+            {
+              assetName: '服务器共享靶标007',
+              identifyByTimestamp: 17098844334731,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
+            {
+              assetName: '服务器-专用-默认008',
+              identifyByTimestamp: 17098854180537,
+              'targetId|1-2': 100,
+              targetType: 3001,
+            },
           ],
           targetId: '@integer(101,102)',
         },
@@ -45,12 +81,12 @@ const mockData = () => {
           keyOnly: 1709885228092,
           nodeId: 'node1709885228109',
           subTargets: [
-            // {
-            //   assetName: '快照靶标',
-            //   identifyByTimestamp: 1709885404713,
-            //   'targetId|3-5': 100,
-            //   targetType: 3001,
-            // },
+            {
+              assetName: '快照靶标',
+              identifyByTimestamp: 1709885404713,
+              'targetId|3-5': 100,
+              targetType: 3001,
+            },
           ],
           targetId: '@integer(103,105)',
         },
@@ -70,9 +106,11 @@ const queryResult = () => {
 };
 
 export const start = () => {
-  queryResult().then((data: any) => {
-    bus.emit('ws:refresh:report', data.data);
-  });
+  setTimeout(() => {
+    queryResult().then((data: any) => {
+      bus.emit('ws:refresh:report', data.data);
+    });
+  }, 2000);
   setInterval(() => {
     queryWarn().then((data: any) => {
       bus.emit('ws:refresh:warn', data.data);
@@ -82,5 +120,5 @@ export const start = () => {
     queryResult().then((data: any) => {
       bus.emit('ws:refresh:report', data.data);
     });
-  }, 10000);
+  }, 60000);
 };
