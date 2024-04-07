@@ -2,14 +2,21 @@ let basePath = './source/';
 let envMap;
 let aroundNumber = 10;
 let aroundRadius = 50;
+let pointLights = [];
+let currIndex = null;
+let flyingAnimation = null;
+let aircraftModels = [];
 
 let map = new EM.Map('MapCancas', {
   zoom: 20.29,
   minZoom: 19,
   center: [0, 0, 0],
-  pitch: 60,
+  pitch: 45,
+  maxPitch: 60,
   bgColor: 'rgb(25, 25, 25)',
 });
+addPointLights();
+
 let modelsInfo = [];
 let rotateMeshNames = [
   'Plane002',
@@ -24,6 +31,7 @@ let rotateMeshNames = [
 // map.setLightIntensity(2);
 
 map.on('beforeRender', function () {
+  updateLights();
   for (let object of rotateObjects) {
     object.rotation.z += Math.PI / 180; //度
   }
@@ -40,7 +48,199 @@ promise.then(() => {
 function addAircrafts() {
   let flyRadius = 3;
   let index = Math.floor(Math.random() * aroundNumber);
+  currIndex = index;
   let coord = modelsInfo[index].coordinate;
+
+  let coords = [
+    [coord[0] - 5, coord[1] + 5, 10],
+    [coord[0] + 5, coord[1] + 5, 10],
+    [coord[0] + 5, coord[1] - 5, 10],
+    [coord[0] - 5, coord[1] - 5, 10],
+  ];
+  let aircraft = new EM.model.Model({
+    url: basePath + 'data/aircraft.gltf',
+    coordinate: coords[0],
+    rotate: [90, 0, 0],
+    scale: [10, 10, 10],
+  });
+  map.addModel(aircraft);
+
+  aircraft.on('loaded', function () {
+    setModelEnvMap(aircraft);
+    aircraftModels.push(aircraft.model);
+    for (let i = 1; i < coords.length; i++) {
+      let aircraftClone = aircraft.model.clone();
+      aircraftClone.position.x = coords[i][0];
+      aircraftClone.position.y = coords[i][1];
+      map.scene.add(aircraftClone);
+      aircraftModels.push(aircraftClone);
+    }
+  });
+}
+
+function aircraftAttack() {
+  if (flyingAnimation) return;
+  let index = Math.floor(Math.random() * aroundNumber);
+  if (index != currIndex) {
+    let des = modelsInfo[index].coordinate,
+      des0 = [des[0] - 5, des[1] + 5, 10],
+      des1 = [des[0] + 5, des[1] + 5, 10],
+      des2 = [des[0] + 5, des[1] - 5, 10],
+      des3 = [des[0] - 5, des[1] - 5, 10];
+    models = aircraftModels;
+    let origin0 = [models[0].position.x, models[0].position.y, 10],
+      origin1 = [models[1].position.x, models[1].position.y, 10],
+      origin2 = [models[2].position.x, models[2].position.y, 10],
+      origin3 = [models[3].position.x, models[3].position.y, 10];
+    flyingAnimation = new TWEEN.Tween({ x: 0 })
+      .to(
+        {
+          //动画过渡 y 1.8
+          x: 1,
+        },
+        5000,
+      )
+      .onUpdate(function (obj, i) {
+        let height = 10;
+        let prev0 = [
+          models[0].position.x,
+          models[0].position.y,
+          models[0].position.z,
+        ];
+        let curr0 = [
+          origin0[0] + i * (des0[0] - origin0[0]),
+          origin0[1] + i * (des0[1] - origin0[1]),
+          10 + Math.sin(i * Math.PI) * height,
+        ];
+        models[0].position.x = curr0[0];
+        models[0].position.y = curr0[1];
+        models[0].position.z = curr0[2];
+        let nextVector0 = new THREE.Vector3(
+          2 * curr0[0] - prev0[0],
+          2 * curr0[1] - prev0[1],
+          2 * curr0[2] - prev0[2],
+        );
+        models[0].lookAt(nextVector0);
+
+        let prev1 = [
+          models[1].position.x,
+          models[1].position.y,
+          models[1].position.z,
+        ];
+        let curr1 = [
+          origin1[0] + i * (des1[0] - origin1[0]),
+          origin1[1] + i * (des1[1] - origin1[1]),
+          10 + Math.sin(i * Math.PI) * height,
+        ];
+        models[1].position.x = curr1[0];
+        models[1].position.y = curr1[1];
+        models[1].position.z = curr1[2];
+        let nextVector1 = new THREE.Vector3(
+          2 * curr1[0] - prev1[0],
+          2 * curr1[1] - prev1[1],
+          2 * curr1[2] - prev1[2],
+        );
+        models[1].lookAt(nextVector1);
+
+        let prev2 = [
+          models[2].position.x,
+          models[2].position.y,
+          models[2].position.z,
+        ];
+        let curr2 = [
+          origin2[0] + i * (des2[0] - origin2[0]),
+          origin2[1] + i * (des2[1] - origin2[1]),
+          10 + Math.sin(i * Math.PI) * height,
+        ];
+        models[2].position.x = curr2[0];
+        models[2].position.y = curr2[1];
+        models[2].position.z = curr2[2];
+        let nextVector2 = new THREE.Vector3(
+          2 * curr2[0] - prev2[0],
+          2 * curr2[1] - prev2[1],
+          2 * curr2[2] - prev2[2],
+        );
+        models[2].lookAt(nextVector2);
+
+        let prev3 = [
+          models[3].position.x,
+          models[3].position.y,
+          models[3].position.z,
+        ];
+        let curr3 = [
+          origin3[0] + i * (des3[0] - origin3[0]),
+          origin3[1] + i * (des3[1] - origin3[1]),
+          10 + Math.sin(i * Math.PI) * height,
+        ];
+        models[3].position.x = curr3[0];
+        models[3].position.y = curr3[1];
+        models[3].position.z = curr3[2];
+        let nextVector3 = new THREE.Vector3(
+          2 * curr3[0] - prev3[0],
+          2 * curr3[1] - prev3[1],
+          2 * curr3[2] - prev3[2],
+        );
+        models[3].lookAt(nextVector3);
+      })
+      .onComplete(function () {
+        flyingAnimation = null;
+      })
+      .start();
+  }
+}
+/**
+ * 添加动态点光源
+ */
+function addPointLights() {
+  const sphere = new THREE.SphereGeometry(0.5, 16, 8);
+  var light1 = new THREE.PointLight(0xffaa00, 0.2);
+  light1.add(
+    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xff0040 })),
+  );
+  map.scene.add(light1);
+  light1.position.z = 15;
+
+  var light2 = new THREE.PointLight(0xffaa00, 0.2);
+  light2.add(
+    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x0040ff })),
+  );
+  map.scene.add(light2);
+  light2.position.z = 15;
+
+  var light3 = new THREE.PointLight(0xffaa00, 0.2);
+  light3.add(
+    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x80ff80 })),
+  );
+  map.scene.add(light3);
+  light3.position.z = 15;
+
+  var light4 = new THREE.PointLight(0xffaa00, 0.2);
+  light4.add(
+    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xffaa00 })),
+  );
+  map.scene.add(light4);
+  light4.position.z = 15;
+
+  pointLights.push(light1, light2, light3, light4);
+}
+
+/**
+ * 更新点光源的位置
+ */
+function updateLights() {
+  if (pointLights.length == 0) return;
+  let time = Date.now() * 0.0005;
+  pointLights[0].position.x = Math.sin(time * 0.7) * aroundRadius;
+  pointLights[0].position.y = Math.cos(time * 0.5) * aroundRadius;
+
+  pointLights[1].position.x = Math.cos(time * 0.3) * aroundRadius;
+  pointLights[1].position.y = Math.sin(time * 0.5) * aroundRadius;
+
+  pointLights[2].position.x = Math.sin(time * 0.7) * aroundRadius;
+  pointLights[2].position.y = Math.cos(time * 0.3) * aroundRadius;
+
+  pointLights[3].position.x = Math.sin(time * 0.3) * aroundRadius;
+  pointLights[3].position.y = Math.cos(time * 0.7) * aroundRadius;
 }
 
 //添加全部周边
@@ -261,6 +461,17 @@ function addDefenseSphere() {
     radius: 15,
   });
   map.addObject(sphere);
+  // let sphere = new EM.model.Model({
+  //     url: basePath + "data/football.glb",
+  //     coordinate: [coord[0], coord[1], 1],
+  //     rotate: [90, 0, 0],
+  //     scale: [10, 10, 10],
+  // });
+  // map.addModel(sphere);
+
+  // sphere.on("loaded",function(){
+  //     // setModelEnvMap(bottom);
+  // })
 }
 
 function focusOne() {
@@ -284,6 +495,14 @@ function returnGlobe() {
     },
     3000,
   );
+}
+
+function setAround() {
+  map.setAutoRotate(true);
+}
+
+function stopAround() {
+  map.setAutoRotate(false);
 }
 
 //添加主体魔方
