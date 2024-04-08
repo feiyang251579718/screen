@@ -6,6 +6,21 @@ let pointLights = [];
 let currIndex = null;
 let flyingAnimation = null;
 let aircraftModels = [];
+let darkNames = [
+  'Component146',
+  'Component148',
+  'Component149',
+  'Component150',
+  'Component151',
+  'Component152',
+  'Component153',
+  'Component154',
+  'Component156',
+  'Component156',
+  'Component158',
+  'Component159',
+  'Component160',
+];
 
 let map = new EM.Map('MapCancas', {
   zoom: 20.29,
@@ -17,14 +32,14 @@ let map = new EM.Map('MapCancas', {
 });
 addPointLights();
 
+window.g_bus.addListener('ws:refresh:report', (data) => {
+  console.log('refreshReport receive data :>> ', data);
+});
+window.g_bus.addListener('update:basicInfo', (data) => {
+  console.log('updateBasic receive data :>> ', data);
+});
+
 let modelsInfo = [];
-let rotateMeshNames = [
-  'Plane002',
-  'Plane003',
-  'Plane040',
-  '管道',
-  'Component30',
-];
 // map.renderer.toneMapping = THREE.LinearToneMapping
 // map.renderer.toneMappingExposure = 2;
 
@@ -32,9 +47,6 @@ let rotateMeshNames = [
 
 map.on('beforeRender', function () {
   updateLights();
-  for (let object of rotateObjects) {
-    object.rotation.z += Math.PI / 180; //度
-  }
 });
 
 let modelPromises = []; //保存加载模型的全部promise
@@ -61,7 +73,7 @@ function addAircrafts() {
     url: basePath + 'data/aircraft.gltf',
     coordinate: coords[0],
     rotate: [90, 0, 0],
-    scale: [10, 10, 10],
+    scale: [15, 15, 15],
   });
   map.addModel(aircraft);
 
@@ -193,33 +205,39 @@ function aircraftAttack() {
  */
 function addPointLights() {
   const sphere = new THREE.SphereGeometry(0.5, 16, 8);
-  var light1 = new THREE.PointLight(0xffaa00, 0.2);
+  var light1 = new THREE.PointLight(0x0040ff, 0.2);
   light1.add(
-    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xff0040 })),
+    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x0040ff })),
   );
   map.scene.add(light1);
   light1.position.z = 15;
 
-  var light2 = new THREE.PointLight(0xffaa00, 0.2);
+  var light2 = new THREE.PointLight(0x0040ff, 0.2);
   light2.add(
     new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x0040ff })),
   );
   map.scene.add(light2);
   light2.position.z = 15;
 
-  var light3 = new THREE.PointLight(0xffaa00, 0.2);
+  var light3 = new THREE.PointLight(0x0040ff, 0.2);
   light3.add(
-    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x80ff80 })),
+    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x0040ff })),
   );
   map.scene.add(light3);
   light3.position.z = 15;
 
-  var light4 = new THREE.PointLight(0xffaa00, 0.2);
+  var light4 = new THREE.PointLight(0x0040ff, 0.2);
   light4.add(
-    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xffaa00 })),
+    new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x0040ff })),
   );
   map.scene.add(light4);
   light4.position.z = 15;
+
+  var light5 = new THREE.PointLight(0xffaa66, 0.2);
+  map.scene.add(light5);
+  light5.position.x = 0;
+  light5.position.y = 0;
+  light5.position.z = 15;
 
   pointLights.push(light1, light2, light3, light4);
 }
@@ -248,58 +266,58 @@ function addAround() {
   //定义周边环绕，因为模型比例不一致，这里微调下
   let aroundArr = [
     {
-      model: 'data/1.glb',
-      rotate: [90, 0, 0],
-      scale: [1, 1, 1],
-      color: '#00f',
-    },
-    {
-      model: 'data/2.glb',
-      rotate: [90, 0, 0],
-      scale: [1, 1, 1],
-      color: '#00f',
-    },
-    {
-      model: 'data/3.glb',
-      rotate: [90, 0, 0],
-      scale: [1, 1, 1],
-      color: '#0f0',
-    },
-    {
-      model: 'data/4.glb',
-      rotate: [90, 0, 0],
-      scale: [1, 1, 1],
-      color: '#0f0',
-    },
-    {
-      model: 'data/5.glb',
+      model: 'data/01.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
       color: '#fff',
     },
     {
-      model: 'data/6.glb',
+      model: 'data/02.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#0f0',
+      color: '#f00',
     },
     {
-      model: 'data/7.glb',
-      rotate: [90, 0, 0],
-      scale: [1, 1, 1],
-      color: '#0f0',
-    },
-    {
-      model: 'data/8.glb',
+      model: 'data/03.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
       color: '#ff0',
     },
     {
-      model: 'data/9.glb',
+      model: 'data/04.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#f00',
+      color: '#0f0',
+    },
+    {
+      model: 'data/05.glb',
+      rotate: [90, 0, 0],
+      scale: [1, 1, 1],
+      color: '#0f0',
+    },
+    {
+      model: 'data/06.glb',
+      rotate: [90, 0, 0],
+      scale: [1, 1, 1],
+      color: '#fff',
+    },
+    {
+      model: 'data/07.glb',
+      rotate: [90, 0, 0],
+      scale: [1, 1, 1],
+      color: '#0f0',
+    },
+    {
+      model: 'data/08.glb',
+      rotate: [90, 0, 0],
+      scale: [1, 1, 1],
+      color: '#ff0',
+    },
+    {
+      model: 'data/09.glb',
+      rotate: [90, 0, 0],
+      scale: [1, 1, 1],
+      color: '#00f',
     },
     {
       model: 'data/10.glb',
@@ -367,6 +385,7 @@ function addOneAround(posArr, info) {
 
   let promise = new Promise((resolve, reject) => {
     around.on('loaded', function () {
+      around.start();
       resolve();
       setModelEnvMap(around); //设置物理材质环境光
     });
@@ -525,7 +544,7 @@ function addMain() {
 
   //模仿顶部
   let cube = new EM.model.Model({
-    url: basePath + 'data/cube2.glb',
+    url: basePath + 'data/cube.gltf',
     coordinate: [0, 0, 10],
     rotate: [90, 0, 0],
     scale: [4, 4, 4],
@@ -533,26 +552,27 @@ function addMain() {
   map.addModel(cube);
 
   cube.on('loaded', function () {
+    cube.start();
     setModelEnvMap(cube);
   });
 
-  let modelUp = true;
-  map.on('beforeRender', function () {
-    if (cube.model) {
-      cube.model.rotation.y += (Math.PI * 2) / 180; //度
-      if (modelUp) {
-        cube.model.position.z += 0.1;
-        if (cube.model.position.z > 15) {
-          modelUp = false;
-        }
-      } else {
-        cube.model.position.z -= 0.1;
-        if (cube.model.position.z < 5) {
-          modelUp = true;
-        }
-      }
-    }
-  });
+  // let modelUp = true;
+  // map.on("beforeRender", function () {
+  //   if (cube.model) {
+  //     cube.model.rotation.y += (Math.PI * 2) / 180; //度
+  //     if (modelUp) {
+  //       cube.model.position.z += 0.1;
+  //       if (cube.model.position.z > 15) {
+  //         modelUp = false;
+  //       }
+  //     } else {
+  //       cube.model.position.z -= 0.1;
+  //       if (cube.model.position.z < 5) {
+  //         modelUp = true;
+  //       }
+  //     }
+  //   }
+  // });
 }
 
 /**
@@ -569,7 +589,6 @@ function initEnvMap() {
   });
 }
 
-const rotateObjects = [];
 //设置环境光
 function setModelEnvMap(model) {
   let object = model.model || model;
@@ -577,25 +596,25 @@ function setModelEnvMap(model) {
     if (
       mesh.name != '' &&
       mesh.name.indexOf('Component') != -1 &&
-      mesh.parent.name != 'root' &&
+      mesh.parent.name.indexOf('root') == -1 &&
       mesh.parent.parent &&
-      mesh.parent.parent.name != 'root'
+      mesh.parent.parent.name.indexOf('root') == -1
     ) {
       if (mesh.material && !mesh.material.adjustColor) {
         let oriRGB = mesh.material.color;
         mesh.material.color.setRGB(
-          oriRGB.r * 0.1,
-          oriRGB.g * 0.1,
-          oriRGB.b * 0.1,
+          oriRGB.r * 0.2,
+          oriRGB.g * 0.2,
+          oriRGB.b * 0.2,
         );
         mesh.material.adjustColor = true;
       }
     }
-    if (mesh.name == 'root.001') {
-      debugger;
-    }
-    if (rotateMeshNames.indexOf(mesh.name) != -1) {
-      rotateObjects.push(mesh);
+    if (mesh.parent && mesh.parent.name == '平面_RLExtr006_RLExtr001') {
+      if (mesh.material) {
+        let oriRGB = mesh.material.color;
+        mesh.material.color.setRGB(0.0, 0.0, 0.3);
+      }
     }
     if (mesh.material && mesh.material instanceof THREE.MeshStandardMaterial) {
       mesh.material.envMap = envMap;
@@ -621,11 +640,8 @@ function setModelEnvMap(model) {
 // });
 
 let bloom = new EM.effect.Bloom({
-  strength: 0.8,
-  radius: 0.5,
-  threshold: 0, //阈值
+  strength: 0.5,
+  radius: 0.2,
+  threshold: 0.3, //阈值
 });
 map.addEffect(bloom);
-
-// let fxaa = new EM.effect.Fxaa();        //抗锯齿
-// map.addEffect(fxaa);
