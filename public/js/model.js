@@ -478,6 +478,7 @@ function addDefenseSphere() {
     coordinate: [coord[0], coord[1], 1],
     color: 'rgb(8, 126, 126)',
     radius: 15,
+    iconUrl: basePath + 'images/sphere.jpg',
   });
   map.addObject(sphere);
   // let sphere = new EM.model.Model({
