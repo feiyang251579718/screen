@@ -18,7 +18,6 @@ export const useQueryBasicInfo = () => {
         const result = response.data;
         setData(result);
         bus.emit('update:basicInfo', result);
-        console.log('send');
         return result;
       },
     );

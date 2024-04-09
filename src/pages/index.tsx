@@ -35,11 +35,11 @@ const Index: React.FC<IProps> = () => {
           <List title="攻击队排名" type="attacker" collapse={false} />
           <List title="防守队排名" type="defender" collapse={false} />
         </div>
-        {/* <div className={style.middle}>
+        <div className={style.middle}>
           <div className={style.battleContent}>
             <BattleInfo />
           </div>
-        </div> */}
+        </div>
         <div className={style.right}>
           <PieCard />
           <WarnList />
