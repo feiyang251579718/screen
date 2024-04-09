@@ -1,6 +1,6 @@
 let basePath = './source/';
 let envMap;
-let aroundNumber = 10;
+let aroundNumber = 0;
 let aroundRadius = 50;
 let pointLights = [];
 let currIndex = null;
@@ -21,44 +21,200 @@ let darkNames = [
   'Component159',
   'Component160',
 ];
+let modelsInfo = [];
+let modelPromises = []; //保存加载模型的全部promise
+let map = null;
 
-let map = new EM.Map('MapCancas', {
-  zoom: 20.29,
-  minZoom: 19,
-  center: [0, 0, 0],
-  pitch: 45,
-  maxPitch: 60,
-  bgColor: 'rgb(25, 25, 25)',
-});
-addPointLights();
+function zoomToTarget(ids, targetsNum, k = 0) {
+  let info, num;
+  for (let i = 0; i < modelsInfo.length; i++) {
+    if (modelsInfo[i].targetId == ids[k]) {
+      info = modelsInfo[i];
+      num = targetsNum[k];
+      break;
+    }
+  }
+  let position = info && info.coordinate;
+  map.animate(
+    {
+      zoom: 21,
+      center: [position[0], position[1], position[2] + 5],
+    },
+    1500,
+  );
+  aircraftAttack(info);
+  k++;
+  if (k < ids.length) {
+    let time = 3000;
+    if (num > 6) time += 10000;
+    setTimeout(() => {
+      zoomToTarget(ids, targetsNum, k);
+    }, time);
+  } else {
+    setTimeout(() => {
+      map.animate(
+        {
+          zoom: 20.29,
+          center: [0, 0, 0],
+          pitch: 45,
+          roll: 0,
+        },
+        1500,
+      );
+    }, 15000);
+  }
+}
 
 window.g_bus.addListener('ws:refresh:report', (data) => {
   console.log('refreshReport receive data :>> ', data);
+  let targets = data.isMatchAreaTargets;
+  if (targets.length != 0) {
+    let ids = targets.map((item) => {
+      return item.targetId;
+    });
+    let targetsNum = targets.map((item) => {
+      return item.subTargets.length;
+    });
+    zoomToTarget(ids, targetsNum, 0);
+  }
+  let defaultJSON = {
+    teamName: '测试大屏接口防守1',
+    reportId: 177,
+    id: '32000020240221677X',
+    reportName: '测试目标靶标测试发送socket哈',
+    teamId: 112896,
+    time: '10:03:47',
+    isMatchAreaTargets: [
+      {
+        id: 10,
+        isMatch: 1,
+        keyOnly: 1709884455747,
+        nodeId: 'node1709884456552',
+        subTargets: [
+          {
+            assetName: '服务器共享靶标001',
+            identifyByTimestamp: 17098844343731,
+            targetId: 2,
+            targetType: 3001,
+          },
+          {
+            assetName: '服务器-专用-2',
+            identifyByTimestamp: 17098851280537,
+            targetId: 1,
+            targetType: 3001,
+          },
+          {
+            assetName: '服务器共享靶标003',
+            identifyByTimestamp: 17098844434731,
+            targetId: 2,
+            targetType: 3001,
+          },
+          {
+            assetName: '服务器-专用-默认004',
+            identifyByTimestamp: 17098856180537,
+            targetId: 1,
+            targetType: 3001,
+          },
+          {
+            assetName: '服务器共享靶标005',
+            identifyByTimestamp: 17098844333434732,
+            targetId: 1,
+            targetType: 3001,
+          },
+          {
+            assetName: '服务器-专用-默认006',
+            identifyByTimestamp: 17098851820537,
+            targetId: 2,
+            targetType: 3001,
+          },
+          {
+            assetName: '服务器共享靶标007',
+            identifyByTimestamp: 17098844334731,
+            targetId: 2,
+            targetType: 3001,
+          },
+          {
+            assetName: '服务器-专用-默认008',
+            identifyByTimestamp: 17098854180537,
+            targetId: 1,
+            targetType: 3001,
+          },
+        ],
+        targetId: 101,
+      },
+      {
+        id: 11,
+        isMatch: 1,
+        keyOnly: 1709885228092,
+        nodeId: 'node1709885228109',
+        subTargets: [
+          {
+            assetName: '快照靶标',
+            identifyByTimestamp: 1709885404713,
+            targetId: 3,
+            targetType: 3001,
+          },
+        ],
+        targetId: 103,
+      },
+    ],
+    roleType: 2,
+    type: 1,
+    content: '测试大屏接口防守1 提交了 测试目标靶标测试发送socket哈 测试大',
+  };
 });
 window.g_bus.addListener('update:basicInfo', (data) => {
-  console.log('updateBasic receive data :>> ', data);
+  if (!data) return;
+  let defaultJSON = {
+    rankNum: 1,
+    targetRangeName: '韩平',
+    openRankStatus: 1,
+    attackerTeamNum: 16,
+    defenderTeamNum: 5,
+    attackerTeamMemberNum: 12,
+    defenderTeamMemberNum: 9,
+    targetRangeAssetAreas: [
+      { areaId: 10, areaName: '银行', targetId: 101 },
+      { areaId: 10, areaName: '学校', targetId: 102 },
+      { areaId: 10, areaName: '医院', targetId: 103 },
+      { areaId: 11, areaName: '民政局', targetId: 104 },
+      { areaId: 11, areaName: '公安局', targetId: 105 },
+      { areaId: 11, areaName: '住建局', targetId: 106 },
+    ],
+  };
+  let areas = data.targetRangeAssetAreas;
+  aroundNumber = areas.length;
+
+  map = new EM.Map('MapCancas', {
+    zoom: 20.29,
+    minZoom: 19,
+    center: [0, 0, 0],
+    pitch: 45,
+    maxPitch: 60,
+    bgColor: 'rgb(25, 25, 25)',
+  });
+  // addBloom();
+  window.map = map;
+  addPointLights();
+
+  map.on('beforeRender', function () {
+    updateLights();
+  });
+
+  let promise = initEnvMap();
+  promise.then(() => {
+    addMain();
+    addAround(areas);
+    addAircrafts(); //添加飞机
+  });
 });
 
-let modelsInfo = [];
 // map.renderer.toneMapping = THREE.LinearToneMapping
 // map.renderer.toneMappingExposure = 2;
 
 // map.setLightIntensity(2);
 
-map.on('beforeRender', function () {
-  updateLights();
-});
-
-let modelPromises = []; //保存加载模型的全部promise
-let promise = initEnvMap();
-promise.then(() => {
-  addMain();
-  addAround();
-  addAircrafts(); //添加飞机
-});
-
 function addAircrafts() {
-  let flyRadius = 3;
   let index = Math.floor(Math.random() * aroundNumber);
   currIndex = index;
   let coord = modelsInfo[index].coordinate;
@@ -90,115 +246,117 @@ function addAircrafts() {
   });
 }
 
-function aircraftAttack() {
-  if (flyingAnimation) return;
-  let index = Math.floor(Math.random() * aroundNumber);
-  if (index != currIndex) {
-    let des = modelsInfo[index].coordinate,
-      des0 = [des[0] - 5, des[1] + 5, 10],
-      des1 = [des[0] + 5, des[1] + 5, 10],
-      des2 = [des[0] + 5, des[1] - 5, 10],
-      des3 = [des[0] - 5, des[1] - 5, 10];
-    models = aircraftModels;
-    let origin0 = [models[0].position.x, models[0].position.y, 10],
-      origin1 = [models[1].position.x, models[1].position.y, 10],
-      origin2 = [models[2].position.x, models[2].position.y, 10],
-      origin3 = [models[3].position.x, models[3].position.y, 10];
-    flyingAnimation = new TWEEN.Tween({ x: 0 })
-      .to(
-        {
-          //动画过渡 y 1.8
-          x: 1,
-        },
-        5000,
-      )
-      .onUpdate(function (obj, i) {
-        let height = 10;
-        let prev0 = [
-          models[0].position.x,
-          models[0].position.y,
-          models[0].position.z,
-        ];
-        let curr0 = [
-          origin0[0] + i * (des0[0] - origin0[0]),
-          origin0[1] + i * (des0[1] - origin0[1]),
-          10 + Math.sin(i * Math.PI) * height,
-        ];
-        models[0].position.x = curr0[0];
-        models[0].position.y = curr0[1];
-        models[0].position.z = curr0[2];
-        let nextVector0 = new THREE.Vector3(
-          2 * curr0[0] - prev0[0],
-          2 * curr0[1] - prev0[1],
-          2 * curr0[2] - prev0[2],
-        );
-        models[0].lookAt(nextVector0);
-
-        let prev1 = [
-          models[1].position.x,
-          models[1].position.y,
-          models[1].position.z,
-        ];
-        let curr1 = [
-          origin1[0] + i * (des1[0] - origin1[0]),
-          origin1[1] + i * (des1[1] - origin1[1]),
-          10 + Math.sin(i * Math.PI) * height,
-        ];
-        models[1].position.x = curr1[0];
-        models[1].position.y = curr1[1];
-        models[1].position.z = curr1[2];
-        let nextVector1 = new THREE.Vector3(
-          2 * curr1[0] - prev1[0],
-          2 * curr1[1] - prev1[1],
-          2 * curr1[2] - prev1[2],
-        );
-        models[1].lookAt(nextVector1);
-
-        let prev2 = [
-          models[2].position.x,
-          models[2].position.y,
-          models[2].position.z,
-        ];
-        let curr2 = [
-          origin2[0] + i * (des2[0] - origin2[0]),
-          origin2[1] + i * (des2[1] - origin2[1]),
-          10 + Math.sin(i * Math.PI) * height,
-        ];
-        models[2].position.x = curr2[0];
-        models[2].position.y = curr2[1];
-        models[2].position.z = curr2[2];
-        let nextVector2 = new THREE.Vector3(
-          2 * curr2[0] - prev2[0],
-          2 * curr2[1] - prev2[1],
-          2 * curr2[2] - prev2[2],
-        );
-        models[2].lookAt(nextVector2);
-
-        let prev3 = [
-          models[3].position.x,
-          models[3].position.y,
-          models[3].position.z,
-        ];
-        let curr3 = [
-          origin3[0] + i * (des3[0] - origin3[0]),
-          origin3[1] + i * (des3[1] - origin3[1]),
-          10 + Math.sin(i * Math.PI) * height,
-        ];
-        models[3].position.x = curr3[0];
-        models[3].position.y = curr3[1];
-        models[3].position.z = curr3[2];
-        let nextVector3 = new THREE.Vector3(
-          2 * curr3[0] - prev3[0],
-          2 * curr3[1] - prev3[1],
-          2 * curr3[2] - prev3[2],
-        );
-        models[3].lookAt(nextVector3);
-      })
-      .onComplete(function () {
-        flyingAnimation = null;
-      })
-      .start();
+function aircraftAttack(info) {
+  if (flyingAnimation) {
+    flyingAnimation.stop();
   }
+  let des = info.coordinate,
+    des0 = [des[0] - 5, des[1] + 5, 10],
+    des1 = [des[0] + 5, des[1] + 5, 10],
+    des2 = [des[0] + 5, des[1] - 5, 10],
+    des3 = [des[0] - 5, des[1] - 5, 10];
+  let models = aircraftModels;
+  let origin0 = [models[0].position.x, models[0].position.y, 10],
+    origin1 = [models[1].position.x, models[1].position.y, 10],
+    origin2 = [models[2].position.x, models[2].position.y, 10],
+    origin3 = [models[3].position.x, models[3].position.y, 10];
+  flyingAnimation = new TWEEN.Tween({ x: 0 })
+    .to(
+      {
+        //动画过渡 y 1.8
+        x: 1,
+      },
+      5000,
+    )
+    .onUpdate(function (obj, i) {
+      let height = 10;
+      let prev0 = [
+        models[0].position.x,
+        models[0].position.y,
+        models[0].position.z,
+      ];
+      let curr0 = [
+        origin0[0] + i * (des0[0] - origin0[0]),
+        origin0[1] + i * (des0[1] - origin0[1]),
+        10 + Math.sin(i * Math.PI) * height,
+      ];
+      models[0].position.x = curr0[0];
+      models[0].position.y = curr0[1];
+      models[0].position.z = curr0[2];
+      let nextVector0 = new THREE.Vector3(
+        2 * curr0[0] - prev0[0],
+        2 * curr0[1] - prev0[1],
+        2 * curr0[2] - prev0[2],
+      );
+      models[0].lookAt(nextVector0);
+
+      let prev1 = [
+        models[1].position.x,
+        models[1].position.y,
+        models[1].position.z,
+      ];
+      let curr1 = [
+        origin1[0] + i * (des1[0] - origin1[0]),
+        origin1[1] + i * (des1[1] - origin1[1]),
+        10 + Math.sin(i * Math.PI) * height,
+      ];
+      models[1].position.x = curr1[0];
+      models[1].position.y = curr1[1];
+      models[1].position.z = curr1[2];
+      let nextVector1 = new THREE.Vector3(
+        2 * curr1[0] - prev1[0],
+        2 * curr1[1] - prev1[1],
+        2 * curr1[2] - prev1[2],
+      );
+      models[1].lookAt(nextVector1);
+
+      let prev2 = [
+        models[2].position.x,
+        models[2].position.y,
+        models[2].position.z,
+      ];
+      let curr2 = [
+        origin2[0] + i * (des2[0] - origin2[0]),
+        origin2[1] + i * (des2[1] - origin2[1]),
+        10 + Math.sin(i * Math.PI) * height,
+      ];
+      models[2].position.x = curr2[0];
+      models[2].position.y = curr2[1];
+      models[2].position.z = curr2[2];
+      let nextVector2 = new THREE.Vector3(
+        2 * curr2[0] - prev2[0],
+        2 * curr2[1] - prev2[1],
+        2 * curr2[2] - prev2[2],
+      );
+      models[2].lookAt(nextVector2);
+
+      let prev3 = [
+        models[3].position.x,
+        models[3].position.y,
+        models[3].position.z,
+      ];
+      let curr3 = [
+        origin3[0] + i * (des3[0] - origin3[0]),
+        origin3[1] + i * (des3[1] - origin3[1]),
+        10 + Math.sin(i * Math.PI) * height,
+      ];
+      models[3].position.x = curr3[0];
+      models[3].position.y = curr3[1];
+      models[3].position.z = curr3[2];
+      let nextVector3 = new THREE.Vector3(
+        2 * curr3[0] - prev3[0],
+        2 * curr3[1] - prev3[1],
+        2 * curr3[2] - prev3[2],
+      );
+      models[3].lookAt(nextVector3);
+      if (i > 0.9) {
+        addDefenseSphere(info);
+      }
+    })
+    .onComplete(function () {
+      flyingAnimation = null;
+    })
+    .start();
 }
 /**
  * 添加动态点光源
@@ -262,68 +420,68 @@ function updateLights() {
 }
 
 //添加全部周边
-function addAround() {
+function addAround(areaInfos) {
   //定义周边环绕，因为模型比例不一致，这里微调下
   let aroundArr = [
     {
       model: 'data/01.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#fff',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/02.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#f00',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/03.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#ff0',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/04.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#0f0',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/05.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#0f0',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/06.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#fff',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/07.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#0f0',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/08.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#ff0',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/09.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#00f',
+      color: '#rgb(125,230,248)',
     },
     {
       model: 'data/10.glb',
       rotate: [90, 0, 0],
       scale: [1, 1, 1],
-      color: '#fff',
+      color: '#rgb(125,230,248)',
     },
   ];
   let movingInfo = [];
@@ -332,7 +490,11 @@ function addAround() {
     let baseX = Math.cos(angle) * aroundRadius,
       baseY = Math.sin(angle) * aroundRadius,
       baseZ = -1;
-    let movingCoords = addOneAround([baseX, baseY, baseZ], aroundArr[i]);
+    let movingCoords = addOneAround(
+      [baseX, baseY, baseZ],
+      aroundArr[i],
+      areaInfos[i],
+    );
     if (movingCoords) {
       let movingPointCoords = movingCoords.map((i) => {
         return [i[0], i[1], i[2] + 0.2];
@@ -361,12 +523,16 @@ function addAround() {
         blending: 'normal',
       });
       map.addObject(points);
+      for (let i = 0; i < aroundNumber; i++) {
+        addName(areaInfos[i], modelsInfo[i].coordinate);
+      }
+      addCube();
     });
   }
 }
 
 //添加一个周边
-function addOneAround(posArr, info) {
+function addOneAround(posArr, info, areaInfo) {
   //模方底部
   let around = new EM.model.Model({
     url: basePath + info.model,
@@ -381,6 +547,9 @@ function addOneAround(posArr, info) {
     coordinate: posArr,
     rotate: info.rotate,
     scale: info.scale,
+    areaId: areaInfo.areaId,
+    areaName: areaInfo.areaName,
+    targetId: areaInfo.targetId,
   });
 
   let promise = new Promise((resolve, reject) => {
@@ -392,8 +561,29 @@ function addOneAround(posArr, info) {
   });
   modelPromises.push(promise);
 
-  let movingPoints = [];
   return addLink(posArr, info.color);
+}
+
+function addName(areaInfo, posArr) {
+  // {"areaId":10,"areaName":"银行","targetId":101},
+  let areaName = areaInfo.areaName;
+  let icon = new EM.marker.SpriteIcon({
+    coordinate: posArr,
+    size: 128,
+    anchor: [0.5, 0.5],
+    iconUrl: basePath + 'images/bottom.png',
+  });
+  map.addMarker(icon);
+
+  let text = new EM.marker.SpriteText({
+    text: areaName,
+    coordinate: posArr,
+    fontSize: 18,
+    fontColor: '#fff',
+    strokeWidth: null,
+    anchor: [0.5, 0.5],
+  });
+  map.addMarker(text);
 }
 
 //添加周边与主模仿的链接
@@ -471,9 +661,8 @@ function attack() {
 }
 
 //添加防护罩
-function addDefenseSphere() {
-  let index = Math.floor(Math.random() * aroundNumber);
-  let coord = modelsInfo[index].coordinate;
+function addDefenseSphere(info) {
+  let coord = info.coordinate;
   let sphere = new EM.mesh.HalfSphere({
     coordinate: [coord[0], coord[1], 1],
     color: 'rgb(8, 126, 126)',
@@ -481,6 +670,9 @@ function addDefenseSphere() {
     iconUrl: basePath + 'images/sphere.jpg',
   });
   map.addObject(sphere);
+  setTimeout(() => {
+    map.removeObject(sphere);
+  }, 1000);
   // let sphere = new EM.model.Model({
   //     url: basePath + "data/football.glb",
   //     coordinate: [coord[0], coord[1], 1],
@@ -525,11 +717,42 @@ function stopAround() {
   map.setAutoRotate(false);
 }
 
+function addCube() {
+  //模仿顶部
+  let cube = new EM.model.Model({
+    url: basePath + 'data/cube.gltf',
+    coordinate: [0, 0, 30],
+    rotate: [90, 0, 0],
+    scale: [8, 8, 8],
+  });
+  map.addModel(cube);
+
+  cube.on('loaded', function () {
+    cube.model.renderOrder = 999;
+    cube.start();
+    setModelEnvMap(cube);
+  });
+
+  let modelUp = true;
+  map.on('beforeRender', function () {
+    if (cube.model) {
+      cube.model.rotation.y += (0.5 * (Math.PI * 2)) / 180; //度
+      if (modelUp) {
+        cube.model.position.z += 0.1;
+        if (cube.model.position.z > 35) {
+          modelUp = false;
+        }
+      } else {
+        cube.model.position.z -= 0.1;
+        if (cube.model.position.z < 25) {
+          modelUp = true;
+        }
+      }
+    }
+  });
+}
 //添加主体魔方
 function addMain() {
-  let mainlayer = new EM.layer.Layer();
-  map.addLayer(mainlayer);
-
   //模方底部
   let bottom = new EM.model.Model({
     url: basePath + 'data/bottom.glb',
@@ -542,38 +765,6 @@ function addMain() {
   bottom.on('loaded', function () {
     setModelEnvMap(bottom);
   });
-
-  //模仿顶部
-  let cube = new EM.model.Model({
-    url: basePath + 'data/cube.gltf',
-    coordinate: [0, 0, 10],
-    rotate: [90, 0, 0],
-    scale: [4, 4, 4],
-  });
-  map.addModel(cube);
-
-  cube.on('loaded', function () {
-    cube.start();
-    setModelEnvMap(cube);
-  });
-
-  // let modelUp = true;
-  // map.on("beforeRender", function () {
-  //   if (cube.model) {
-  //     cube.model.rotation.y += (Math.PI * 2) / 180; //度
-  //     if (modelUp) {
-  //       cube.model.position.z += 0.1;
-  //       if (cube.model.position.z > 15) {
-  //         modelUp = false;
-  //       }
-  //     } else {
-  //       cube.model.position.z -= 0.1;
-  //       if (cube.model.position.z < 5) {
-  //         modelUp = true;
-  //       }
-  //     }
-  //   }
-  // });
 }
 
 /**
@@ -630,19 +821,11 @@ function setModelEnvMap(model) {
   });
 }
 
-// around2.on("loaded",function(){
-//     around2.model.traverse((mesh)=>{
-//         if(mesh.material){
-//             mesh.material.transparent = true;
-//             mesh.material.opacity = 0.5;
-//             mesh.material.blending = THREE.AdditiveBlending;
-//         }
-//     })
-// });
-
-let bloom = new EM.effect.Bloom({
-  strength: 0.5,
-  radius: 0.2,
-  threshold: 0.3, //阈值
-});
-map.addEffect(bloom);
+function addBloom() {
+  let bloom = new EM.effect.Bloom({
+    strength: 0.5,
+    radius: 0.2,
+    threshold: 0.3, //阈值
+  });
+  map.addEffect(bloom);
+}
