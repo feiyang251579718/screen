@@ -163,12 +163,14 @@ export default {
       },
     }),
   'GET /api/targetRangeBigScreen/getAlarmDetailStatistic': mockjs.mock({
-    'data|4': {
-      infoSecurity: '@cname',
-      infoSecurityName: '@cname',
-      'countStatistic|1-20': 1,
-      'statisticRate|1-20': 1,
-    },
+    'data|4-20': [
+      {
+        infoSecurity: '@cname',
+        infoSecurityName: '@cname',
+        'countStatistic|1-20': 1,
+        'statisticRate|1-20': 1,
+      },
+    ],
   }),
   'GET /api/alarmList': mockjs.mock({
     data: {
