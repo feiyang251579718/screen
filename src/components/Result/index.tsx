@@ -44,8 +44,6 @@ const Result: React.FC<IProps> = ({ type }) => {
     { immediate: true },
   );
 
-  console.log('index :>> ', index);
-
   const SubTargets = useMemo(
     () => warnData?.isMatchAreaTargets?.[index]?.subTargets || [],
     [index, warnData],

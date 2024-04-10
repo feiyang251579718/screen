@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import VirtualList, { ListRef } from 'rc-virtual-list';
-import { Tooltip } from 'antd';
 import { useSize } from 'ahooks';
 import Panel from '../Panel';
 import EmptyData from '../EmptyData';
@@ -41,19 +40,11 @@ const WarnList: React.FC<IProps> = () => {
             {(item, index) => (
               <div className={style.listItem} key={index}>
                 <div className={style.time}>{item.time}</div>
-                <div className={style.title}>
-                  <Tooltip title={item.infosecurityName}>
-                    {item.infosecurityName}
-                  </Tooltip>
-                </div>
+                <div className={style.title}>{item.infosecurityName}</div>
                 <div className={style.terminal}>
-                  <Tooltip title={item.isBeAttackTargetName}>
-                    {item.isBeAttackTargetName}
-                  </Tooltip>
+                  {item.isBeAttackTargetName}
                 </div>
-                <div className={style.type}>
-                  <Tooltip title={item.content}>{item.content}</Tooltip>
-                </div>
+                <div className={style.type}>{item.content}</div>
               </div>
             )}
           </VirtualList>
