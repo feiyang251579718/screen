@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import VirtualList, { ListRef } from 'rc-virtual-list';
 import { Tooltip } from 'antd';
 import { useSize } from 'ahooks';
@@ -18,20 +18,12 @@ const WarnList: React.FC<IProps> = () => {
 
   useEffect(() => {
     bus.addListener('ws:refresh:warn', (data: WarnMessage) => {
-      setWarnList((list) => [...list, data]);
+      setWarnList((list) => [data, ...list]);
     });
     return () => {
       bus.removeListener('ws:refresh:warn');
     };
   }, []);
-
-  useEffect(() => {
-    if (vListRef.current) {
-      vListRef.current.scrollTo({
-        index: warnList.length - 1,
-      });
-    }
-  }, [warnList]);
 
   return (
     <Panel title="安全告警" size="large" collapse={false}>

@@ -2,9 +2,24 @@ import { bus } from './bus';
 import mockjs from 'mockjs';
 
 const queryWarn = () => {
-  return fetch('/api/alarmList').then((response) => {
-    const data = response.json();
-    return data;
+  // return fetch('/api/alarmList').then((response) => {
+  //   const data = response.json();
+  //   return data;
+  // });
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(
+        mockjs.mock({
+          data: {
+            isBeAttackTargetName: '@csentence(3, 5)',
+            infosecurityName: '@csentence(3, 5)',
+            time: '@time("HH:mm")',
+            teamName: '@cname',
+            content: '@cparagraph(1, 5)',
+          },
+        }),
+      );
+    });
   });
 };
 
@@ -106,19 +121,19 @@ const queryResult = () => {
 };
 
 export const start = () => {
-  setTimeout(() => {
-    queryResult().then((data: any) => {
-      bus.emit('ws:refresh:report', data.data);
-    });
-  }, 2000);
+  // setTimeout(() => {
+  //   queryResult().then((data: any) => {
+  //     bus.emit('ws:refresh:report', data.data);
+  //   });
+  // }, 2000);
   setInterval(() => {
     queryWarn().then((data: any) => {
       bus.emit('ws:refresh:warn', data.data);
     });
   }, 3000);
-  setInterval(() => {
-    queryResult().then((data: any) => {
-      bus.emit('ws:refresh:report', data.data);
-    });
-  }, 60000);
+  // setInterval(() => {
+  //   queryResult().then((data: any) => {
+  //     bus.emit('ws:refresh:report', data.data);
+  //   });
+  // }, 60000);
 };
