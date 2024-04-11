@@ -24,7 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Pull Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Runs a set of commands using the runners shell
       - name: Use Node.js
