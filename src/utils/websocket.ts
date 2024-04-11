@@ -17,6 +17,8 @@ interface WebSocketData {
   data: any;
 }
 
+const reconnectInterval = 1000;
+
 const init = (token: string, exerciseId: string) => {
   const socket = new WebSocket(
     `${ws_prefix}/targetRangeExercise/${token?.split(/\s/)?.[1]}/${exerciseId}`,
@@ -32,6 +34,10 @@ const init = (token: string, exerciseId: string) => {
       socket.send('keep');
     }
   }, 30000);
+
+  socket.onclose = function () {
+    setTimeout(init, reconnectInterval);
+  };
 
   // Listen for messages
   socket.addEventListener('message', (event) => {

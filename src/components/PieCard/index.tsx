@@ -25,7 +25,7 @@ const PieCard: React.FC<IProps> = () => {
 
   const queryData = useCallback(() => {
     get<AlarmStatic[]>(RequestUrl.alarmDetail).then((res) => {
-      setData(res.data);
+      setData(res.data || []);
       // setTimeout(() => {
       //   setData([
       //     {
@@ -71,7 +71,7 @@ const PieCard: React.FC<IProps> = () => {
     };
   }, []);
 
-  const emptyData = useMemo(() => !data.length, [data]);
+  const emptyData = useMemo(() => !data?.length, [data]);
 
   const big4List = useMemo(() => {
     return slice(data, 0, 4);

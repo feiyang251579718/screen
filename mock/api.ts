@@ -117,6 +117,11 @@ export default {
       targetRangeName: '@cname',
       'openRankStatus|0-1': 0,
       'attackerTeamNum|1-20': 1,
+      exerciseLogo:
+        'https://uat-university-file.sangfor.com/file/20240126/fon-logo2108241635241220t2um240126145549489y8i55.png',
+      exerciseName: '2024靶场演练大屏联调',
+      exerciseStartTime: 1710485943000,
+      exerciseEndTime: 1713016503000,
       'defenderTeamNum|1-20': 1,
       'attackerTeamMemberNum|1-20': 1,
       'defenderTeamMemberNum|1-20': 1,

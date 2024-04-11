@@ -20,4 +20,4 @@ export default () => {
   );
 };
 
-//'?authorization=Bearer eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6ImY2M2YxM2Y2LTA1NDYtNDg5Ny04YjZlLTYyYzU5NzA4YTc0MyJ9.x29JtD59sFzRmJhQaDa0atyzGhYvxJdHW_iTdcJ3M7sN8gVVNbP4qT6koCrjDzb88oFKmBSSsx45endaZu-GCw&exerciseId=10000153&appId=10001&appKey=111fbbbac2cd416dba1c11396e6eccd5';
+//'?authorization=Bearer eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6ImU4ZjlkYjNhLWY3MjktNDQ1ZC1hZDgyLWJjYjlmNmU2NDM2ZiJ9.ob-Nt5ntXiBGPlm3VzchHiwTxxfAMckSuLb7P9j4TTDPZbvE7aKZPYBGIp7YEXqVxlU_ltt_XN3Vvsbnxs4Czw&exerciseId=10000153&appId=10001&appKey=111fbbbac2cd416dba1c11396e6eccd5';
