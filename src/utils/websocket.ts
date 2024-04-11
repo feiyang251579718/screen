@@ -5,15 +5,16 @@ import { start } from './mock';
 let conn: WebSocket | undefined = undefined;
 
 enum WebSocketCode {
-  WarnList = 801,
-  AttackType = 802,
-  RefreshRank = 803,
-  ReportResult = 804,
-  ResouceRefresh = 805,
+  WarnList = '801',
+  AttackType = '802',
+  RefreshRank = '803',
+  ReportResult = '804',
+  ResouceRefresh = '805',
 }
 interface WebSocketData {
   code: WebSocketCode;
   msg: string;
+  exerciseId: string;
   data: any;
 }
 
@@ -28,6 +29,9 @@ const init = (token: string, exerciseId: string) => {
   socket.addEventListener('open', (event) => {
     console.log('connect');
   });
+  socket.addEventListener('error', (error) => {
+    console.log('error', error);
+  });
 
   setInterval(() => {
     if (socket.readyState === WebSocket.OPEN) {
@@ -36,13 +40,15 @@ const init = (token: string, exerciseId: string) => {
   }, 30000);
 
   socket.onclose = function () {
-    setTimeout(init, reconnectInterval);
+    setTimeout(() => {
+      init(token, exerciseId);
+    }, reconnectInterval);
   };
 
   // Listen for messages
-  socket.addEventListener('message', (event) => {
-    console.log('Message from server ', event.data);
-    const data: WebSocketData = event.data;
+  socket.addEventListener('message', (event: MessageEvent<WebSocketData>) => {
+    console.log('Message from server ', event);
+    const data = event.data;
     switch (data.code) {
       case WebSocketCode.WarnList:
         bus.emit('ws:refresh:warn', data.data);
